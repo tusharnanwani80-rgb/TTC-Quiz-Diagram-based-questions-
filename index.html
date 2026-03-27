@@ -3,1008 +3,1453 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TTC Quiz – Maths</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&family=Righteous&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<title>TTC Wardha – Tushar Tuition Classes</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:wght@700;900&family=Pacifico&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --coral: #ff6b6b;
+    --coral-dark: #e85555;
+    --coral-light: #fff0f0;
+    --sky: #4da6ff;
+    --sky-light: #e8f4ff;
+    --amber: #ffb347;
+    --mint: #5de0b5;
+    --purple: #a78bfa;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+    --white: #ffffff;
+    --bg: #fdf6f0;
+    --card-bg: #ffffff;
+    --radius: 20px;
+    --summer-orange: #FF8C42;
+    --summer-yellow: #FFD166;
+    --summer-teal: #06D6A0;
+    --foundation-color: #FF8C42;
+    --advanced-color: #4da6ff;
+  }
  
-/* ═══════════════════════════════════
-   QUIZ ROOT VARIABLES
-═══════════════════════════════════ */
-:root {
-  --blue:   #4361EE;
-  --orange: #FF6B35;
-  --lime:   #C8FF00;
-  --pink:   #FF3D8A;
-  --white:  #FFFFFF;
-  --off:    #F5F4FF;
-  --dark:   #111118;
-  --grey:   #6B6B80;
-  --light:  #EDEDF7;
-  --green:  #25D366;
-}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--coral); border-radius: 10px; }
  
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--off);
-  background-image: repeating-linear-gradient(
-    -45deg,
-    transparent, transparent 18px,
-    rgba(67,97,238,0.045) 18px, rgba(67,97,238,0.045) 19px
-  );
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px 0;
-}
+  /* ─── SUMMER ANNOUNCEMENT RIBBON ─── */
+  #summer-ribbon {
+    background: linear-gradient(90deg, #FF8C42, #ff6b6b, #FFD166, #FF8C42);
+    background-size: 300% 100%;
+    animation: ribbon-slide 4s linear infinite;
+    color: white;
+    text-align: center;
+    padding: 10px 20px;
+    font-size: 0.88rem;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    position: relative;
+    z-index: 200;
+    cursor: pointer;
+  }
+  #summer-ribbon:hover { filter: brightness(1.08); }
+  @keyframes ribbon-slide {
+    0%{background-position:0% 50%} 100%{background-position:300% 50%}
+  }
+  .ribbon-inner { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
+  .ribbon-badge {
+    background: rgba(255,255,255,0.25);
+    border: 1.5px solid rgba(255,255,255,0.5);
+    border-radius: 30px; padding: 3px 12px; font-size: 0.75rem; font-weight: 900;
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+  .ribbon-pulse { display: inline-block; width: 8px; height: 8px; background: #fff; border-radius: 50%; animation: pulse-dot 1s infinite; }
+  @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.5)} }
  
-/* ═══════════════════════════════════
-   AD OVERLAY
-═══════════════════════════════════ */
-#adOverlay {
-  position: fixed; inset: 0; z-index: 1000;
-  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-  display: flex; align-items: center; justify-content: center;
-  transition: opacity 0.6s ease;
-}
+  /* ─── NAV ─── */
+  nav {
+    position: sticky; top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255,107,107,0.12);
+    padding: 14px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: box-shadow .3s;
+  }
+  nav.scrolled { box-shadow: 0 4px 30px rgba(255,107,107,0.12); }
+  .nav-brand { display: flex; align-items: center; gap: 12px; }
+  .nav-brand img { width: 44px; height: 44px; border-radius: 12px; object-fit: contain; }
+  .nav-brand-text { font-weight: 800; font-size: 1.1rem; color: var(--coral); letter-spacing: -0.3px; }
+  .nav-brand-sub { font-size: 0.72rem; color: var(--muted); font-weight: 600; }
+  .nav-links { display: flex; gap: 6px; align-items: center; }
+  .nav-links a {
+    text-decoration: none; font-weight: 700; font-size: 0.88rem;
+    color: var(--text); padding: 8px 14px; border-radius: 40px;
+    transition: all .25s;
+  }
+  .nav-links a:hover { background: var(--coral-light); color: var(--coral); }
+  .nav-summer {
+    background: linear-gradient(135deg, #FF8C42, #ff6b6b) !important;
+    color: white !important; border-radius: 40px !important;
+    padding: 8px 16px !important; font-size: 0.82rem !important;
+    animation: summer-glow 2s ease-in-out infinite alternate;
+  }
+  @keyframes summer-glow {
+    from { box-shadow: 0 4px 14px rgba(255,140,66,0.35); }
+    to { box-shadow: 0 6px 22px rgba(255,140,66,0.6); }
+  }
+  .nav-cta {
+    background: var(--coral); color: white !important;
+    padding: 8px 20px !important; border-radius: 40px;
+    transition: all .25s !important;
+  }
+  .nav-cta:hover { background: var(--coral-dark) !important; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,107,107,0.35) !important; }
  
-/* ── AD STAGE (all ad vars scoped here) ── */
-.stage {
-  --rust:   #E8522A;
-  --rust2:  #FF7043;
-  --cream:  #FFF8F3;
-  --yellow: #FFD93D;
-  --blue:   #4CC9F0;
-  --green:  #06D6A0;
-  --pink:   #FF6B9D;
-  --purple: #A78BFA;
-  --dark:   #2D2A26;
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    position: relative; overflow: hidden;
+    padding: 80px 40px 60px;
+  }
+  .hero-blob {
+    position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.22; pointer-events: none;
+  }
+  .blob-1 { width: 520px; height: 520px; background: var(--coral); top: -100px; right: -80px; animation: blob-drift 8s ease-in-out infinite alternate; }
+  .blob-2 { width: 380px; height: 380px; background: var(--sky); bottom: -80px; left: -60px; animation: blob-drift 10s ease-in-out infinite alternate-reverse; }
+  .blob-3 { width: 260px; height: 260px; background: var(--amber); top: 40%; left: 40%; animation: blob-drift 12s ease-in-out infinite alternate; }
+  @keyframes blob-drift {
+    from { transform: translate(0,0) scale(1); }
+    to { transform: translate(30px,20px) scale(1.08); }
+  }
+  .hero-inner {
+    max-width: 1200px; margin: auto; position: relative; z-index: 2;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--coral-light); color: var(--coral);
+    font-weight: 800; font-size: 0.8rem; padding: 6px 16px;
+    border-radius: 40px; border: 1.5px solid rgba(255,107,107,0.2);
+    margin-bottom: 20px;
+    animation: fade-up .7s ease both;
+  }
+  .badge-dot { width: 7px; height: 7px; background: var(--coral); border-radius: 50%; animation: pulse-dot 1.5s infinite; }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    font-weight: 900; line-height: 1.1; color: var(--text);
+    animation: fade-up .8s ease .1s both;
+  }
+  .hero-title span { color: var(--coral); position: relative; display: inline-block; }
+  .hero-title span::after {
+    content: ''; position: absolute; bottom: 2px; left: 0; right: 0;
+    height: 10px; background: rgba(255,107,107,0.18); border-radius: 4px; z-index: -1;
+  }
+  .hero-desc {
+    font-size: 1.05rem; color: var(--muted); line-height: 1.75;
+    margin: 20px 0 32px;
+    animation: fade-up .8s ease .2s both;
+  }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; animation: fade-up .8s ease .3s both; }
+  .btn-primary {
+    background: var(--coral); color: white;
+    padding: 14px 28px; border-radius: 50px; border: none;
+    font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 800;
+    cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+    transition: all .25s; box-shadow: 0 8px 24px rgba(255,107,107,0.35);
+  }
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 14px 34px rgba(255,107,107,0.4); }
+  .btn-secondary {
+    background: white; color: var(--text);
+    padding: 14px 28px; border-radius: 50px; border: 2px solid #eee;
+    font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 800;
+    cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+    transition: all .25s;
+  }
+  .btn-secondary:hover { border-color: var(--coral); color: var(--coral); transform: translateY(-3px); }
+  .btn-summer {
+    background: linear-gradient(135deg, #FF8C42, #FFD166); color: white;
+    padding: 14px 28px; border-radius: 50px; border: none;
+    font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 800;
+    cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+    transition: all .25s; box-shadow: 0 8px 24px rgba(255,140,66,0.4);
+  }
+  .btn-summer:hover { transform: translateY(-3px); box-shadow: 0 14px 34px rgba(255,140,66,0.5); }
+  .hero-stats {
+    display: flex; gap: 28px; margin-top: 36px;
+    animation: fade-up .8s ease .4s both;
+  }
+  .stat { text-align: left; }
+  .stat-num { font-size: 1.8rem; font-weight: 900; color: var(--text); }
+  .stat-label { font-size: 0.78rem; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+  .hero-visual { animation: fade-left .9s ease .2s both; position: relative; }
+  .hero-card-stack { position: relative; height: 400px; }
+  .hero-card {
+    position: absolute; border-radius: var(--radius); padding: 28px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+    animation: float 5s ease-in-out infinite;
+  }
+  .hc-main { background: white; width: 280px; top: 50px; left: 40px; animation-delay: 0s; }
+  .hc-2 { background: var(--coral); color: white; width: 220px; top: 0; right: 0; animation-delay: 1.5s; }
+  .hc-3 { background: var(--sky); color: white; width: 200px; bottom: 40px; right: 20px; animation-delay: 3s; }
+  /* Summer card floating */
+  .hc-summer {
+    background: linear-gradient(135deg, #FF8C42, #FFD166);
+    color: white; width: 180px; bottom: 0; left: 20px; animation-delay: 2s;
+    animation: float 6s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+  .hc-icon { font-size: 2rem; margin-bottom: 10px; }
+  .hc-label { font-weight: 800; font-size: 0.95rem; margin-bottom: 4px; }
+  .hc-sub { font-size: 0.78rem; opacity: 0.8; }
  
-  width: 360px; height: 640px;
-  position: relative; overflow: hidden;
-  background: var(--cream);
-  border-radius: 32px;
-  box-shadow:
-    0 0 0 4px #fff,
-    0 0 0 8px var(--rust),
-    0 30px 80px rgba(232,82,42,.3),
-    0 50px 120px rgba(0,0,0,.2);
-}
+  @keyframes fade-up { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fade-left { from{opacity:0;transform:translateX(40px)} to{opacity:1;transform:translateX(0)} }
  
-canvas#particles {
-  position: absolute; inset: 0;
-  z-index: 60; pointer-events: none;
-  border-radius: 32px;
-}
+  /* ─── SECTIONS ─── */
+  section { padding: 80px 40px; }
+  .section-inner { max-width: 1100px; margin: auto; }
+  .section-tag {
+    display: inline-block; background: var(--coral-light); color: var(--coral);
+    font-size: 0.78rem; font-weight: 800; padding: 5px 14px;
+    border-radius: 40px; text-transform: uppercase; letter-spacing: .8px; margin-bottom: 14px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-weight: 900; color: var(--text); margin-bottom: 12px; line-height: 1.2;
+  }
+  .section-desc { color: var(--muted); font-size: 1rem; line-height: 1.7; max-width: 560px; }
  
-/* ── SCENES ── */
-.scene {
-  position: absolute; inset: 0;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  opacity: 0; pointer-events: none; z-index: 10;
-}
-.scene.active { opacity: 1; pointer-events: auto; }
+  /* ══════════════════════════════════════════════════
+     ─── SUMMER CLASSES SECTION ───
+  ══════════════════════════════════════════════════ */
+  #summer {
+    background: linear-gradient(170deg, #fff8f0 0%, #fffdf5 40%, #f0f9ff 100%);
+    position: relative; overflow: hidden;
+    padding: 100px 40px;
+  }
+  /* Decorative suns */
+  .summer-deco {
+    position: absolute; border-radius: 50%; pointer-events: none; opacity: 0.08;
+  }
+  .sd-1 { width: 400px; height: 400px; background: #FF8C42; top: -120px; right: -80px; }
+  .sd-2 { width: 280px; height: 280px; background: #FFD166; bottom: -60px; left: -60px; }
+  .sd-3 { width: 180px; height: 180px; background: #06D6A0; top: 50%; left: 10%; }
  
-/* S0 — HEY HOOK */
-.s0 { background: var(--yellow); overflow: hidden; }
-.s0 .dots-bg {
-  position: absolute; inset: 0;
-  background-image: radial-gradient(circle, rgba(255,255,255,.55) 2px, transparent 2px);
-  background-size: 28px 28px;
-}
-.hey-emoji {
-  font-size: 72px; opacity: 0; transform: scale(0) rotate(-20deg);
-  position: relative; z-index: 2;
-  filter: drop-shadow(0 6px 0 rgba(0,0,0,.12));
-}
-.s0.active .hey-emoji { animation: bounceIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) 0.1s forwards; }
-.hey-text {
-  font-family: 'Fredoka One', cursive; font-size: 80px; line-height: 1;
-  color: var(--dark); text-align: center; position: relative; z-index: 2;
-  opacity: 0; transform: translateY(30px); text-shadow: 0 5px 0 rgba(0,0,0,.1);
-}
-.s0.active .hey-text { animation: adSlideUp 0.35s ease 0.35s forwards; }
-.hey-sub {
-  font-size: 18px; font-weight: 800; color: var(--rust); letter-spacing: 1px;
-  position: relative; z-index: 2; opacity: 0; transform: translateY(15px); margin-top: 10px;
-}
-.s0.active .hey-sub { animation: adSlideUp 0.3s ease 0.6s forwards; }
-.pill-row { display: flex; gap: 8px; position: relative; z-index: 2; margin-top: 20px; opacity: 0; }
-.s0.active .pill-row { animation: adFadeIn 0.3s ease 0.85s forwards; }
-.pill {
-  background: #fff; border-radius: 50px; padding: 6px 14px;
-  font-size: 12px; font-weight: 800; color: var(--dark);
-  box-shadow: 0 3px 0 rgba(0,0,0,.1);
-}
+  .summer-header { text-align: center; margin-bottom: 60px; position: relative; z-index: 2; }
+  .summer-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: linear-gradient(135deg, #FF8C42, #FFD166);
+    color: white; font-size: 0.82rem; font-weight: 900; padding: 8px 20px;
+    border-radius: 40px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px;
+    box-shadow: 0 6px 20px rgba(255,140,66,0.35);
+  }
+  .summer-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4.5vw, 3.2rem);
+    font-weight: 900; color: var(--text); line-height: 1.15; margin-bottom: 16px;
+  }
+  .summer-title .highlight {
+    background: linear-gradient(135deg, #FF8C42, #ff6b6b);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .summer-subtitle { color: var(--muted); font-size: 1.05rem; line-height: 1.7; max-width: 580px; margin: 0 auto 30px; }
  
-/* S1 — COUNTDOWN */
-.s1 { background: var(--cream); overflow: hidden; }
-.s1::before {
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(circle at 50% 50%, rgba(232,82,42,.08) 0%, transparent 70%);
-}
-.cd-ring {
-  width: 220px; height: 220px; border-radius: 50%;
-  border: 8px solid rgba(232,82,42,.15);
-  display: flex; align-items: center; justify-content: center; position: absolute;
-}
-.cd-ring-inner {
-  width: 170px; height: 170px; border-radius: 50%; background: var(--rust);
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 8px 0 #b33d1c, 0 12px 30px rgba(232,82,42,.4);
-  opacity: 0; transform: scale(0);
-}
-.s1.active .cd-ring-inner { animation: popBounce 0.3s cubic-bezier(0.175,0.885,0.32,1.275) 0.05s forwards; }
-.cd-num {
-  font-family: 'Fredoka One', cursive; font-size: 110px; color: #fff;
-  line-height: 1; position: relative; z-index: 2; text-shadow: 0 4px 0 rgba(0,0,0,.2);
-}
-.cd-label {
-  font-size: 14px; font-weight: 800; color: var(--rust); letter-spacing: 4px;
-  text-transform: uppercase; position: absolute; bottom: 130px; opacity: 0;
-}
-.s1.active .cd-label { animation: adFadeIn 0.3s ease 0.3s forwards; }
+  /* Admission Countdown Banner */
+  .admission-banner {
+    display: inline-flex; align-items: center; gap: 14px;
+    background: white; border: 2px solid #FF8C42;
+    border-radius: 60px; padding: 12px 28px;
+    box-shadow: 0 8px 30px rgba(255,140,66,0.18);
+    margin: 0 auto;
+  }
+  .ab-icon { font-size: 1.5rem; animation: bounce-icon 1s ease-in-out infinite alternate; }
+  @keyframes bounce-icon { from{transform:translateY(0)} to{transform:translateY(-4px)} }
+  .ab-text strong { display: block; font-size: 1rem; font-weight: 900; color: var(--text); }
+  .ab-text span { font-size: 0.82rem; color: #FF8C42; font-weight: 700; }
+  .ab-date {
+    background: linear-gradient(135deg, #FF8C42, #ff6b6b);
+    color: white; font-weight: 900; font-size: 0.88rem;
+    padding: 8px 16px; border-radius: 30px;
+    white-space: nowrap;
+  }
  
-/* S2 — TITLE BLAST */
-.s2 { background: var(--cream); overflow: hidden; }
-.s2 .burst-bg {
-  position: absolute; inset: 0;
-  background: conic-gradient(from 0deg,#FFD93D 0deg 30deg,transparent 30deg 60deg,#FFD93D 60deg 90deg,transparent 90deg 120deg,#FFD93D 120deg 150deg,transparent 150deg 180deg,#FFD93D 180deg 210deg,transparent 210deg 240deg,#FFD93D 240deg 270deg,transparent 270deg 300deg,#FFD93D 300deg 330deg,transparent 330deg 360deg);
-  opacity: 0; transform: scale(0); border-radius: 50%;
-  width: 600px; height: 600px; top: 50%; left: 50%; margin: -300px 0 0 -300px;
-}
-.s2.active .burst-bg { animation: burstExpand 0.5s ease 0s forwards; }
-.s2 .logo-ring {
-  width: 100px; height: 100px; border-radius: 50%; background: var(--rust);
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 6px 0 #b33d1c, 0 10px 24px rgba(232,82,42,.35);
-  margin-bottom: 16px; position: relative; z-index: 2;
-  opacity: 0; transform: scale(0) rotate(-180deg);
-}
-.s2.active .logo-ring { animation: spinIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275) 0.15s forwards; }
-.s2 .logo-ring img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; }
-.big-ttc {
-  font-family: 'Fredoka One', cursive; font-size: 100px; line-height: .95;
-  color: var(--rust); text-align: center; position: relative; z-index: 2;
-  opacity: 0; transform: scale(0.4) rotate(-6deg); text-shadow: 0 6px 0 #b33d1c; letter-spacing: -2px;
-}
-.s2.active .big-ttc { animation: blastIn 0.35s cubic-bezier(0.175,0.885,0.32,1.275) 0.25s forwards; }
-.big-quiz {
-  font-family: 'Fredoka One', cursive; font-size: 86px; line-height: .95;
-  color: var(--dark); text-align: center; position: relative; z-index: 2;
-  opacity: 0; transform: scale(0.4) rotate(6deg); text-shadow: 0 5px 0 rgba(0,0,0,.15);
-}
-.s2.active .big-quiz { animation: blastIn 0.35s cubic-bezier(0.175,0.885,0.32,1.275) 0.38s forwards; }
-.v2-tag {
-  background: var(--green); color: #fff; font-size: 12px; font-weight: 900;
-  letter-spacing: 2px; padding: 6px 18px; border-radius: 50px; position: relative; z-index: 2;
-  margin-top: 14px; box-shadow: 0 4px 0 #04a87e; opacity: 0; transform: translateY(15px);
-}
-.s2.active .v2-tag { animation: adSlideUp 0.3s ease 0.6s forwards; }
+  /* Tab Switcher */
+  .summer-tabs {
+    display: flex; justify-content: center; gap: 12px;
+    margin-bottom: 44px; position: relative; z-index: 2;
+  }
+  .summer-tab {
+    padding: 12px 32px; border-radius: 50px; border: 2.5px solid transparent;
+    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.95rem;
+    cursor: pointer; transition: all .3s;
+  }
+  .summer-tab.foundation {
+    background: #fff5ee; color: #FF8C42; border-color: #FF8C42;
+  }
+  .summer-tab.foundation.active, .summer-tab.foundation:hover {
+    background: linear-gradient(135deg, #FF8C42, #ffb347); color: white;
+    box-shadow: 0 8px 24px rgba(255,140,66,0.4); transform: translateY(-2px);
+  }
+  .summer-tab.advanced {
+    background: #eff6ff; color: #4da6ff; border-color: #4da6ff;
+  }
+  .summer-tab.advanced.active, .summer-tab.advanced:hover {
+    background: linear-gradient(135deg, #4da6ff, #6366f1); color: white;
+    box-shadow: 0 8px 24px rgba(77,166,255,0.4); transform: translateY(-2px);
+  }
  
-/* S3 — FEATURES */
-.s3 { background: var(--cream); padding: 30px 22px; justify-content: flex-start; padding-top: 60px; }
-.s3 .feat-title {
-  font-family: 'Fredoka One', cursive; font-size: 28px; color: var(--dark);
-  text-align: center; margin-bottom: 18px; opacity: 0;
-}
-.s3.active .feat-title { animation: adFadeIn 0.25s ease 0.05s forwards; }
-.feat-list { display: flex; flex-direction: column; gap: 11px; width: 100%; }
-.fcard {
-  display: flex; align-items: center; gap: 14px; padding: 13px 16px; border-radius: 18px;
-  opacity: 0; transform: translateX(-50px) scale(.95); position: relative; overflow: hidden;
-}
-.fcard::after { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,.25); border-radius: 18px; }
-.fcard.c1 { background: #FFE8E0; box-shadow: 0 4px 0 rgba(232,82,42,.25); }
-.fcard.c2 { background: #E8F8FF; box-shadow: 0 4px 0 rgba(76,201,240,.25); }
-.fcard.c3 { background: #E8FFF8; box-shadow: 0 4px 0 rgba(6,214,160,.25); }
-.fcard.c4 { background: #FFF5E0; box-shadow: 0 4px 0 rgba(255,217,61,.4); }
-.s3.active .fcard:nth-child(1) { animation: cardBounce 0.25s cubic-bezier(0.175,0.885,0.32,1.275) 0.15s forwards; }
-.s3.active .fcard:nth-child(2) { animation: cardBounce 0.25s cubic-bezier(0.175,0.885,0.32,1.275) 0.3s forwards; }
-.s3.active .fcard:nth-child(3) { animation: cardBounce 0.25s cubic-bezier(0.175,0.885,0.32,1.275) 0.45s forwards; }
-.s3.active .fcard:nth-child(4) { animation: cardBounce 0.25s cubic-bezier(0.175,0.885,0.32,1.275) 0.6s forwards; }
-.fcard .ficon { font-size: 32px; flex-shrink: 0; position: relative; z-index: 1; }
-.fcard .finfo { flex: 1; position: relative; z-index: 1; }
-.fcard .finfo .flabel { font-size: 11px; font-weight: 700; color: rgba(45,42,38,.4); text-transform: uppercase; letter-spacing: 1px; }
-.fcard .finfo .fval { font-size: 16px; font-weight: 900; color: var(--dark); margin-top: 1px; }
-.fcard .fbadge { font-size: 10px; font-weight: 900; letter-spacing: 1px; padding: 4px 10px; border-radius: 50px; position: relative; z-index: 1; }
-.fbadge.new { background: var(--rust); color: #fff; }
-.fbadge.v2  { background: var(--green); color: #fff; }
+  /* Tab Panels */
+  .summer-panel { display: none; }
+  .summer-panel.active { display: block; animation: panel-in .4s ease both; }
+  @keyframes panel-in { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
  
-/* S4 — UPDATE */
-.s4 { background: var(--rust); overflow: hidden; }
-.s4 .confetti-bg {
-  position: absolute; inset: 0;
-  background-image: radial-gradient(circle,rgba(255,255,255,.12) 3px,transparent 3px), radial-gradient(circle,rgba(255,217,61,.25) 2px,transparent 2px);
-  background-size: 40px 40px, 25px 25px; background-position: 0 0, 12px 12px;
-}
-.s4 .zigzag { position: absolute; top: 0; left: 0; right: 0; height: 30px; background: var(--cream); clip-path: polygon(0 0,5% 100%,10% 0,15% 100%,20% 0,25% 100%,30% 0,35% 100%,40% 0,45% 100%,50% 0,55% 100%,60% 0,65% 100%,70% 0,75% 100%,80% 0,85% 100%,90% 0,95% 100%,100% 0,100% 0,0 0); }
-.s4 .zigzag-bot { position: absolute; bottom: 0; left: 0; right: 0; height: 30px; background: var(--cream); clip-path: polygon(0 100%,5% 0,10% 100%,15% 0,20% 100%,25% 0,30% 100%,35% 0,40% 100%,45% 0,50% 100%,55% 0,60% 100%,65% 0,70% 100%,75% 0,80% 100%,85% 0,90% 100%,95% 0,100% 100%,100% 100%,0 100%); }
-.update-badge {
-  background: var(--yellow); color: var(--dark); font-size: 11px; font-weight: 900;
-  letter-spacing: 3px; padding: 7px 20px; border-radius: 50px; position: relative; z-index: 2;
-  box-shadow: 0 4px 0 rgba(0,0,0,.15); opacity: 0; transform: scale(0);
-}
-.s4.active .update-badge { animation: popBounce 0.3s cubic-bezier(0.175,0.885,0.32,1.275) 0.1s forwards; }
-.update-headline {
-  font-family: 'Fredoka One', cursive; font-size: 62px; line-height: 1; color: #fff;
-  text-align: center; text-shadow: 0 5px 0 rgba(0,0,0,.2); position: relative; z-index: 2;
-  margin-top: 16px; opacity: 0; transform: scale(0.7);
-}
-.s4.active .update-headline { animation: popBounce 0.35s cubic-bezier(0.175,0.885,0.32,1.275) 0.28s forwards; }
-.update-items { display: flex; flex-direction: column; gap: 10px; margin-top: 22px; position: relative; z-index: 2; width: 85%; }
-.uitem { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,.22); border-radius: 14px; padding: 11px 16px; opacity: 0; transform: translateY(20px); }
-.uitem .uicon { font-size: 22px; }
-.uitem .utxt { font-size: 14px; font-weight: 800; color: #fff; }
-.s4.active .uitem:nth-child(1) { animation: adSlideUp 0.25s ease 0.6s forwards; }
-.s4.active .uitem:nth-child(2) { animation: adSlideUp 0.25s ease 0.75s forwards; }
-.s4.active .uitem:nth-child(3) { animation: adSlideUp 0.25s ease 0.9s forwards; }
+  .panel-header {
+    background: white; border-radius: 20px; padding: 28px 36px;
+    margin-bottom: 28px; display: flex; align-items: center; gap: 20px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.07); position: relative; overflow: hidden;
+  }
+  .panel-header::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  }
+  .foundation-panel .panel-header::before { background: linear-gradient(90deg, #FF8C42, #FFD166); }
+  .advanced-panel .panel-header::before { background: linear-gradient(90deg, #4da6ff, #a78bfa); }
+  .ph-icon { font-size: 3rem; }
+  .ph-info {}
+  .ph-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
+  .ph-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+  .ph-badge {
+    margin-left: auto; padding: 8px 18px; border-radius: 30px;
+    font-weight: 900; font-size: 0.82rem; white-space: nowrap;
+  }
+  .foundation-panel .ph-badge { background: #fff5ee; color: #FF8C42; border: 2px solid #FF8C42; }
+  .advanced-panel .ph-badge { background: #eff6ff; color: #4da6ff; border: 2px solid #4da6ff; }
  
-/* S5 — CTA */
-.s5 { background: var(--cream); overflow: hidden; }
-.s5 .top-wave { position: absolute; top: 0; left: 0; right: 0; height: 200px; background: var(--yellow); clip-path: ellipse(55% 60% at 50% 0%); }
-.stars-row { display: flex; gap: 6px; margin-bottom: 16px; position: relative; z-index: 2; opacity: 0; }
-.s5.active .stars-row { animation: adFadeIn 0.3s ease 0.1s forwards; }
-.stars-row span { font-size: 28px; filter: drop-shadow(0 2px 0 rgba(0,0,0,.1)); }
-.cta-logo-wrap { position: relative; z-index: 2; opacity: 0; transform: scale(0) rotate(-360deg); margin-bottom: 14px; }
-.s5.active .cta-logo-wrap { animation: spinIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275) 0.2s forwards; }
-.cta-logo-wrap img { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; border: 4px solid #fff; box-shadow: 0 6px 0 var(--rust), 0 12px 24px rgba(232,82,42,.3); }
-.cta-main-title {
-  font-family: 'Fredoka One', cursive; font-size: 72px; line-height: 1;
-  color: var(--dark); text-align: center; position: relative; z-index: 2;
-  opacity: 0; transform: translateY(25px); letter-spacing: -1px;
-}
-.cta-main-title span { color: var(--rust); }
-.s5.active .cta-main-title { animation: adSlideUp 0.3s ease 0.45s forwards; }
-.cta-subtitle {
-  font-family: 'Nunito', sans-serif; font-size: 20px; font-weight: 900;
-  color: rgba(45,42,38,.55); text-align: center; position: relative; z-index: 2;
-  opacity: 0; transform: translateY(10px); margin-top: 4px; letter-spacing: 0.5px;
-}
-.s5.active .cta-subtitle { animation: adSlideUp 0.3s ease 0.65s forwards; }
-.tag-row { display: flex; gap: 8px; margin-top: 14px; position: relative; z-index: 2; opacity: 0; }
-.s5.active .tag-row { animation: adFadeIn 0.3s ease 0.75s forwards; }
-.tag { font-size: 11px; font-weight: 900; letter-spacing: 1px; padding: 6px 14px; border-radius: 50px; box-shadow: 0 3px 0 rgba(0,0,0,.12); }
-.tag.t1 { background: var(--blue); color: #fff; }
-.tag.t2 { background: var(--green); color: #fff; }
-.tag.t3 { background: var(--pink); color: #fff; }
-.play-btn {
-  margin-top: 22px; background: var(--rust); color: #fff;
-  font-family: 'Fredoka One', cursive; font-size: 22px; letter-spacing: 1px;
-  padding: 18px 48px; border-radius: 18px; border: none; cursor: pointer;
-  box-shadow: 0 7px 0 #b33d1c, 0 12px 24px rgba(232,82,42,.3);
-  position: relative; z-index: 2; opacity: 0; transform: translateY(20px) scale(.9);
-  transition: transform 0.1s, box-shadow 0.1s; overflow: hidden;
-}
-.play-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent); animation: adShimmer 2s linear 1.2s infinite; }
-.s5.active .play-btn { animation: adSlideUp 0.35s cubic-bezier(0.175,0.885,0.32,1.275) 1s forwards, btnPulse 1.8s ease 1.5s infinite; }
-.play-btn:hover { transform: translateY(-2px) scale(1.03) !important; box-shadow: 0 10px 0 #b33d1c, 0 16px 30px rgba(232,82,42,.35) !important; }
-.play-btn:active { transform: translateY(5px) scale(.98) !important; box-shadow: 0 2px 0 #b33d1c !important; }
-.cta-tagline { font-size: 11px; font-weight: 700; color: rgba(45,42,38,.35); text-align: center; margin-top: 14px; letter-spacing: 1px; position: relative; z-index: 2; opacity: 0; }
-.s5.active .cta-tagline { animation: adFadeIn 0.3s ease 1.3s forwards; }
+  /* Course Cards Grid */
+  .courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 18px;
+    position: relative; z-index: 2;
+  }
+  .course-card {
+    background: white; border-radius: 18px; padding: 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    border: 2px solid #f0f0f0;
+    transition: all .3s; cursor: default;
+    display: flex; flex-direction: column; gap: 14px;
+    position: relative; overflow: hidden;
+  }
+  .course-card::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+    opacity: 0; transition: opacity .3s;
+  }
+  .foundation-panel .course-card::after { background: linear-gradient(90deg, #FF8C42, #FFD166); }
+  .advanced-panel .course-card::after { background: linear-gradient(90deg, #4da6ff, #a78bfa); }
+  .course-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(0,0,0,0.12); }
+  .course-card:hover::after { opacity: 1; }
+  .foundation-panel .course-card:hover { border-color: #FF8C42; }
+  .advanced-panel .course-card:hover { border-color: #4da6ff; }
  
-/* ── SCENE DOTS ── */
-.scene-dots { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); display: flex; gap: 5px; z-index: 200; }
-.sdot { width: 6px; height: 6px; border-radius: 50%; background: rgba(45,42,38,.15); transition: all 0.3s; }
-.sdot.on { background: var(--rust); width: 20px; border-radius: 3px; }
+  .cc-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .cc-icon-wrap {
+    width: 50px; height: 50px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+  .foundation-panel .cc-icon-wrap { background: #fff5ee; }
+  .advanced-panel .cc-icon-wrap { background: #eff6ff; }
+  .cc-fee-tag {
+    padding: 6px 14px; border-radius: 30px;
+    font-weight: 900; font-size: 0.88rem; white-space: nowrap;
+  }
+  .foundation-panel .cc-fee-tag { background: #fff5ee; color: #FF8C42; }
+  .advanced-panel .cc-fee-tag { background: #eff6ff; color: #4da6ff; }
+  .cc-name { font-weight: 900; font-size: 1rem; color: var(--text); line-height: 1.3; }
+  .cc-topics { display: flex; flex-wrap: wrap; gap: 6px; }
+  .topic-chip {
+    font-size: 0.73rem; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+    background: #f8f8f8; color: var(--muted); border: 1px solid #eee;
+  }
  
-/* ── PROGRESS ── */
-.prog-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 5px; background: rgba(45,42,38,.06); z-index: 300; border-radius: 0 0 32px 32px; overflow: hidden; }
-.prog-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--rust), var(--yellow)); border-radius: 0 0 32px 32px; box-shadow: 0 0 8px rgba(232,82,42,.5); }
+  /* Summer CTA */
+  .summer-cta-wrap {
+    text-align: center; margin-top: 50px; position: relative; z-index: 2;
+  }
+  .summer-cta-wrap p { color: var(--muted); font-size: 0.9rem; margin-bottom: 16px; font-weight: 600; }
  
-/* ── REPLAY ── */
-.replay-btn {
-  position: absolute; bottom: 14px; right: 14px;
-  background: var(--rust); color: #fff; font-family: 'Fredoka One', cursive;
-  font-size: 13px; letter-spacing: 1px; padding: 8px 18px; border-radius: 50px; border: none;
-  cursor: pointer; box-shadow: 0 3px 0 #b33d1c; opacity: 0; transition: opacity 0.3s; z-index: 500;
-}
-.replay-btn.show { opacity: 1; }
+  /* ─── SUBJECTS ─── */
+  #subjects { background: white; }
+  .subjects-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 14px; margin-top: 40px;
+  }
+  .subject-pill {
+    background: var(--bg); border-radius: 14px; padding: 18px 14px;
+    text-align: center; font-weight: 800; font-size: 0.9rem; color: var(--text);
+    transition: all .25s; cursor: default; border: 2px solid transparent;
+    transform: translateY(20px); opacity: 0;
+  }
+  .subject-pill.visible { animation: pill-in .5s ease forwards; }
+  .subject-pill:hover { border-color: var(--coral); color: var(--coral); transform: translateY(-4px) !important; background: var(--coral-light); }
+  .subject-pill .pill-icon { font-size: 1.6rem; margin-bottom: 8px; display: block; }
+  @keyframes pill-in { to{opacity:1;transform:translateY(0)} }
  
-/* ── START SCREEN ── */
-.start-screen {
-  position: absolute; inset: 0; z-index: 400; background: var(--cream);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  border-radius: 32px; overflow: hidden; transition: opacity 0.4s ease, transform 0.4s ease;
-}
-.start-screen.hide { opacity: 0; transform: scale(1.05); pointer-events: none; }
-.start-screen .top-blob { position: absolute; top: 0; left: 0; right: 0; height: 260px; background: var(--yellow); clip-path: ellipse(60% 65% at 50% 0%); }
-.start-screen .bot-blob { position: absolute; bottom: 0; left: 0; right: 0; height: 120px; background: rgba(232,82,42,.08); clip-path: ellipse(70% 80% at 50% 100%); }
-.start-logo { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 4px solid #fff; box-shadow: 0 6px 0 var(--rust), 0 14px 28px rgba(232,82,42,.25); position: relative; z-index: 2; animation: adFloat 3s ease-in-out infinite; }
-.start-ttc { font-family: 'Fredoka One', cursive; font-size: 52px; line-height: 1; color: var(--rust); text-align: center; position: relative; z-index: 2; margin-top: 18px; text-shadow: 0 4px 0 #b33d1c; }
-.start-ttc span { color: var(--dark); }
-.start-tagline { font-size: 14px; font-weight: 800; color: rgba(45,42,38,.5); letter-spacing: 1px; position: relative; z-index: 2; margin-top: 6px; text-align: center; }
-.start-badge { background: var(--green); color: #fff; font-size: 11px; font-weight: 900; letter-spacing: 2px; padding: 6px 16px; border-radius: 50px; position: relative; z-index: 2; margin-top: 14px; box-shadow: 0 4px 0 #04a87e; }
-.start-btn {
-  margin-top: 36px; background: var(--rust); color: #fff;
-  font-family: 'Fredoka One', cursive; font-size: 24px; letter-spacing: 1px;
-  padding: 18px 56px; border-radius: 18px; border: none; cursor: pointer;
-  box-shadow: 0 7px 0 #b33d1c, 0 14px 28px rgba(232,82,42,.3);
-  position: relative; z-index: 2; overflow: hidden;
-  animation: btnPulse 1.8s ease infinite; transition: transform 0.1s, box-shadow 0.1s;
-}
-.start-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent); animation: adShimmer 2s linear infinite; }
-.start-btn:hover  { transform: translateY(-2px); box-shadow: 0 10px 0 #b33d1c, 0 18px 32px rgba(232,82,42,.35); }
-.start-btn:active { transform: translateY(5px); box-shadow: 0 2px 0 #b33d1c; }
-.start-note { font-size: 11px; font-weight: 700; color: rgba(45,42,38,.3); letter-spacing: 1px; position: relative; z-index: 2; margin-top: 16px; }
+  /* ─── TEACHERS ─── */
+  #teachers { background: var(--bg); }
+  .teachers-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: 24px; margin-top: 44px;
+  }
+  .teacher-card {
+    background: white; border-radius: var(--radius); overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.07);
+    transition: all .3s; border: 2px solid transparent;
+    transform: translateY(30px); opacity: 0;
+  }
+  .teacher-card.visible { animation: fade-up-card .6s ease forwards; }
+  .teacher-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(0,0,0,0.13); border-color: var(--coral-light); }
+  @keyframes fade-up-card { to{opacity:1;transform:translateY(0)} }
+  .teacher-banner { height: 110px; display: flex; align-items: center; justify-content: center; font-size: 3.2rem; position: relative; }
+  .tc-1 .teacher-banner { background: linear-gradient(135deg, #ff9a9e, #ff6b6b); }
+  .tc-2 .teacher-banner { background: linear-gradient(135deg, #a18cd1, #fbc2eb); }
+  .tc-3 .teacher-banner { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+  .teacher-avatar {
+    width: 72px; height: 72px; border-radius: 50%;
+    border: 4px solid white; position: absolute; bottom: -28px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; font-weight: 900; color: white;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  }
+  .tc-1 .teacher-avatar { background: var(--coral); }
+  .tc-2 .teacher-avatar { background: var(--purple); }
+  .tc-3 .teacher-avatar { background: var(--mint); }
+  .teacher-body { padding: 44px 24px 28px; text-align: center; }
+  .teacher-name { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 2px; }
+  .teacher-role { font-size: 0.8rem; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .6px; margin-bottom: 16px; }
+  .teacher-subjects { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .subj-tag {
+    padding: 5px 12px; border-radius: 30px; font-size: 0.78rem; font-weight: 800; border: 1.5px solid;
+  }
+  .tc-1 .subj-tag { background: #fff0f0; color: var(--coral); border-color: rgba(255,107,107,0.25); }
+  .tc-2 .subj-tag { background: #f3f0ff; color: var(--purple); border-color: rgba(167,139,250,0.3); }
+  .tc-3 .subj-tag { background: #f0fff8; color: #10b981; border-color: rgba(93,224,181,0.35); }
  
-/* ── AD KEYFRAMES (prefixed to avoid quiz conflicts) ── */
-@keyframes bounceIn  { 0%{opacity:0;transform:scale(0) rotate(-20deg)} 60%{transform:scale(1.2) rotate(5deg)} 100%{opacity:1;transform:scale(1) rotate(0deg)} }
-@keyframes adSlideUp { from{opacity:0;transform:translateY(25px)} to{opacity:1;transform:translateY(0)} }
-@keyframes adFadeIn  { from{opacity:0} to{opacity:1} }
-@keyframes popBounce { 0%{opacity:0;transform:scale(0)} 65%{transform:scale(1.12)} 100%{opacity:1;transform:scale(1)} }
-@keyframes blastIn   { 0%{opacity:0;transform:scale(0.4) rotate(-6deg)} 65%{transform:scale(1.08) rotate(1deg)} 100%{opacity:1;transform:scale(1) rotate(0deg)} }
-@keyframes spinIn    { 0%{opacity:0;transform:scale(0) rotate(-360deg)} 100%{opacity:1;transform:scale(1) rotate(0deg)} }
-@keyframes burstExpand { 0%{opacity:.4;transform:scale(0) rotate(0)} 100%{opacity:0;transform:scale(3) rotate(30deg)} }
-@keyframes cardBounce  { 0%{opacity:0;transform:translateX(-50px) scale(.95)} 65%{transform:translateX(5px) scale(1.02)} 100%{opacity:1;transform:translateX(0) scale(1)} }
-@keyframes adShimmer   { from{left:-100%} to{left:200%} }
-@keyframes btnPulse    { 0%,100%{box-shadow:0 7px 0 #b33d1c,0 12px 24px rgba(232,82,42,.3)} 50%{box-shadow:0 7px 0 #b33d1c,0 12px 40px rgba(232,82,42,.55)} }
-@keyframes adFloat     { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-@keyframes screenShake { 0%,100%{transform:translate(0,0)} 20%{transform:translate(-5px,3px)} 40%{transform:translate(5px,-3px)} 60%{transform:translate(-4px,4px)} 80%{transform:translate(4px,-2px)} }
+  /* ─── CLASSES ─── */
+  #classes { background: white; }
+  .class-scroll { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 10px; margin-top: 36px; scrollbar-width: none; }
+  .class-scroll::-webkit-scrollbar { display: none; }
+  .class-chip {
+    flex-shrink: 0; background: var(--bg); border-radius: 14px; padding: 18px 22px;
+    text-align: center; min-width: 100px; border: 2px solid transparent; cursor: default;
+    transition: all .25s;
+  }
+  .class-chip:hover { border-color: var(--sky); background: var(--sky-light); transform: translateY(-4px); }
+  .class-chip .chip-num { font-size: 1.7rem; font-weight: 900; color: var(--text); }
+  .class-chip .chip-label { font-size: 0.72rem; color: var(--muted); font-weight: 700; text-transform: uppercase; margin-top: 2px; }
+  .info-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-top: 40px; }
+  .info-stat-card {
+    background: white; border-radius: 16px; padding: 24px 20px;
+    text-align: center; border: 2px solid #f0ece8;
+    transition: all .25s; cursor: default;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  }
+  .info-stat-card:hover { border-color: var(--coral); transform: translateY(-4px); box-shadow: 0 10px 30px rgba(255,107,107,0.12); }
+  .isc-icon { font-size: 1.9rem; margin-bottom: 10px; display: block; }
+  .isc-value { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .isc-label { font-size: 0.76rem; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .6px; }
  
-/* ═══════════════════════════════════
-   QUIZ STYLES
-═══════════════════════════════════ */
-.app { width: 430px; max-width: 95vw; display: none; }
+  /* ─── PREVIEW ─── */
+  #preview { background: var(--bg); text-align: center; }
+  .scroll-device-wrap { perspective: 1200px; margin-top: 50px; animation: device-enter 1s ease .3s both; }
+  @keyframes device-enter { from{opacity:0;transform:perspective(1200px) rotateX(25deg) translateY(40px)} to{opacity:1;transform:perspective(1200px) rotateX(0deg) translateY(0)} }
+  .device {
+    max-width: 860px; margin: auto;
+    border-radius: 20px; overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.18);
+    border: 6px solid #1a1a2e;
+    transform: perspective(1200px) rotateX(8deg);
+    transition: transform .5s ease;
+  }
+  .device:hover { transform: perspective(1200px) rotateX(0deg); }
+  .device-inner {
+    background: linear-gradient(135deg, #fff0f0 0%, #e8f4ff 50%, #f3f0ff 100%);
+    padding: 50px 40px; text-align: left; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: center;
+  }
+  .device-text h2 { font-family: 'Playfair Display',serif; font-size: 2rem; font-weight: 900; color: var(--text); margin-bottom: 12px; }
+  .device-text p { color: var(--muted); line-height: 1.7; font-size: 0.95rem; }
+  .device-cards { display: flex; flex-direction: column; gap: 14px; }
+  .dc { background: white; border-radius: 14px; padding: 16px 20px; display: flex; gap: 14px; align-items: center; box-shadow: 0 4px 16px rgba(0,0,0,0.07); }
+  .dc-icon { font-size: 1.6rem; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .dc-i1 { background: #fff0f0; } .dc-i2 { background: #e8f4ff; } .dc-i3 { background: #f0fff8; }
+  .dc-title { font-weight: 800; font-size: 0.9rem; }
+  .dc-sub { font-size: 0.78rem; color: var(--muted); font-weight: 600; }
  
-.screen { display: none; }
-.screen.active {
-  display: block;
-  animation: popIn 0.42s cubic-bezier(.34,1.56,.64,1) forwards;
-}
-@keyframes popIn {
-  from { opacity: 0; transform: scale(0.92) translateY(18px); }
-  to   { opacity: 1; transform: scale(1) translateY(0); }
-}
+  /* ─── FAQ ─── */
+  #faq { background: white; }
+  .faq-list { margin-top: 40px; max-width: 720px; display: flex; flex-direction: column; gap: 12px; }
+  .faq-item { border: 2px solid #f0f0f0; border-radius: 14px; overflow: hidden; transition: border-color .25s; }
+  .faq-item.open { border-color: var(--coral); }
+  .faq-q {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 22px; cursor: pointer; font-weight: 800; font-size: 0.98rem;
+    background: white; user-select: none; transition: color .25s;
+  }
+  .faq-item.open .faq-q { color: var(--coral); }
+  .faq-chevron { font-size: 1.1rem; transition: transform .3s; }
+  .faq-item.open .faq-chevron { transform: rotate(180deg); }
+  .faq-a {
+    max-height: 0; overflow: hidden; transition: max-height .4s ease, padding .3s;
+    padding: 0 22px; font-size: 0.92rem; color: var(--muted); line-height: 1.7;
+  }
+  .faq-item.open .faq-a { max-height: 300px; padding: 0 22px 18px; }
+  .faq-timing-grid {
+    display: flex; flex-direction: row; gap: 12px; margin-top: 10px;
+    overflow-x: auto; padding-bottom: 8px;
+    scrollbar-width: thin; scrollbar-color: var(--coral) #f0ece8;
+  }
+  .faq-timing-grid::-webkit-scrollbar { height: 4px; }
+  .faq-timing-grid::-webkit-scrollbar-thumb { background: var(--coral); border-radius: 10px; }
+  .faq-batch {
+    background: var(--bg); border-radius: 12px; padding: 16px 18px;
+    display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem;
+    flex-shrink: 0; min-width: 180px; border: 2px solid #f0ece8;
+    transition: border-color .25s, transform .25s;
+  }
+  .faq-batch:hover { border-color: var(--coral); transform: translateY(-3px); }
+  .faq-batch-icon { font-size: 1.5rem; margin-bottom: 4px; }
+  .faq-batch strong { color: var(--text); font-size: 0.9rem; margin-bottom: 2px; }
+  .faq-batch span { color: var(--muted); }
+  .faq-batch-note { color: var(--coral) !important; font-weight: 700; font-size: 0.78rem !important; margin-top: 6px; background: var(--coral-light); padding: 3px 8px; border-radius: 20px; display: inline-block; }
  
-.card {
-  background: var(--white); border: 3px solid var(--dark);
-  border-radius: 24px; padding: 32px 28px;
-  box-shadow: 8px 8px 0px var(--dark); text-align: center;
-  position: relative; overflow: hidden;
-}
-.card::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px;
-  background: linear-gradient(90deg, var(--blue), var(--pink), var(--orange), var(--lime));
-}
+  /* ─── REVIEWS ─── */
+  #reviews { background: white; }
+  .review-card-placeholder {
+    background: var(--bg); border-radius: 16px; padding: 24px;
+    max-width: 280px; flex: 1 1 220px; border: 2px solid #f0ece8;
+    transition: transform .25s, border-color .25s;
+  }
+  .review-card-placeholder:hover { transform: translateY(-4px); border-color: var(--coral); }
+  .rcp-stars { font-size: 1.1rem; margin-bottom: 10px; }
+  .rcp-text { font-size: 0.9rem; color: var(--muted); line-height: 1.6; margin-bottom: 10px; font-style: italic; }
+  .rcp-name { font-weight: 800; font-size: 0.82rem; color: var(--text); }
  
-.logo {
-  width: 72px; height: 72px; object-fit: contain; border-radius: 50%;
-  border: 3px solid var(--dark); box-shadow: 3px 3px 0 var(--dark);
-  margin-bottom: 14px; display: block; margin-left: auto; margin-right: auto;
-}
+  /* ─── CONTACT ─── */
+  #contact { background: var(--bg); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; margin-top: 44px; align-items: start; }
+  .contact-info { display: flex; flex-direction: column; gap: 20px; }
+  .ci-item { display: flex; gap: 14px; align-items: flex-start; }
+  .ci-icon { width: 46px; height: 46px; background: var(--coral-light); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+  .ci-text strong { font-weight: 800; display: block; margin-bottom: 2px; }
+  .ci-text span { font-size: 0.88rem; color: var(--muted); }
+  .contact-form { background: white; border-radius: var(--radius); padding: 36px; box-shadow: 0 10px 40px rgba(0,0,0,0.07); }
+  .form-group { margin-bottom: 18px; }
+  .form-group label { font-weight: 800; font-size: 0.85rem; display: block; margin-bottom: 6px; color: var(--text); }
+  .form-group input, .form-group textarea, .form-group select {
+    width: 100%; padding: 13px 16px;
+    border: 2px solid #e2e8f0; border-radius: 10px;
+    font-family: 'Nunito', sans-serif; font-size: 0.95rem; color: var(--text);
+    background: #ffffff; outline: none; transition: border-color .25s, box-shadow .25s;
+    appearance: none; -webkit-appearance: none; display: block;
+  }
+  .form-group input::placeholder, .form-group textarea::placeholder { color: #b0b8c4; }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+    border-color: var(--coral); background: white; box-shadow: 0 0 0 3px rgba(255,107,107,0.12);
+  }
+  .form-group textarea { height: 110px; resize: vertical; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .submit-btn {
+    width: 100%; background: var(--coral); color: white;
+    border: none; padding: 14px; border-radius: 10px;
+    font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 800;
+    cursor: pointer; transition: all .25s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .submit-btn:hover { background: var(--coral-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,107,107,0.35); }
  
-.chip {
-  display: inline-block; background: var(--lime); color: var(--dark);
-  font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
-  padding: 5px 14px; border-radius: 50px; border: 2px solid var(--dark);
-  box-shadow: 2px 2px 0 var(--dark); margin-bottom: 14px;
-}
+  /* ─── FOOTER ─── */
+  footer { background: var(--text); color: rgba(255,255,255,0.7); padding: 50px 40px 30px; }
+  .footer-inner { max-width: 1100px; margin: auto; }
+  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; margin-bottom: 36px; }
+  .footer-brand img { width: 48px; height: 48px; border-radius: 14px; margin-bottom: 14px; object-fit: contain; }
+  .footer-brand h3 { color: white; font-size: 1.1rem; font-weight: 900; margin-bottom: 8px; }
+  .footer-brand p { font-size: 0.85rem; line-height: 1.7; }
+  .footer-col h4 { color: white; font-weight: 800; margin-bottom: 14px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: .5px; }
+  .footer-col a { display: block; font-size: 0.85rem; color: rgba(255,255,255,0.6); text-decoration: none; margin-bottom: 8px; transition: color .2s; }
+  .footer-col a:hover { color: var(--coral); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; }
+  .footer-heart { color: var(--coral); }
  
-h2 { font-family: 'Righteous', cursive; font-size: 28px; color: var(--dark); line-height: 1.2; margin-bottom: 8px; }
-p.sub { font-size: 14px; color: var(--grey); font-weight: 500; margin-bottom: 20px; }
+  /* ─── REVEAL ─── */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
  
-.input-field {
-  width: 100%; padding: 13px 16px; font-family: 'DM Sans', sans-serif;
-  font-size: 15px; font-weight: 700; color: var(--dark); background: var(--off);
-  border: 2.5px solid var(--dark); border-radius: 14px; outline: none;
-  box-shadow: 3px 3px 0 var(--dark); transition: box-shadow 0.15s, transform 0.15s, border-color 0.15s;
-  margin-bottom: 18px;
-}
-.input-field:focus { box-shadow: 3px 3px 0 var(--blue); border-color: var(--blue); transform: translate(-1px,-1px); }
-.input-field::placeholder { color: #aaa; font-weight: 500; }
- 
-.btn {
-  display: inline-block; width: 100%; padding: 14px 22px;
-  font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 800;
-  border: 2.5px solid var(--dark); border-radius: 14px; cursor: pointer;
-  text-align: center; text-decoration: none; letter-spacing: 0.3px;
-  transition: transform 0.12s, box-shadow 0.12s; box-shadow: 4px 4px 0 var(--dark); margin-top: 10px;
-}
-.btn:hover  { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--dark); }
-.btn:active { transform: translate(2px,2px);   box-shadow: 2px 2px 0 var(--dark); }
-.btn-blue   { background: var(--blue);  color: white; }
-.btn-lime   { background: var(--lime);  color: var(--dark); }
-.btn-pink   { background: var(--pink);  color: white; position: relative; overflow: hidden; }
-.btn-green  { background: var(--green); color: white; }
-.btn-ghost  { background: transparent; color: var(--grey); border-color: var(--light); box-shadow: 4px 4px 0 var(--light); }
-.btn-ghost:hover { border-color: var(--dark); color: var(--dark); box-shadow: 4px 4px 0 var(--dark); }
- 
-.info-strip { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 16px 0 22px; }
-.info-pill {
-  background: var(--off); border: 2px solid var(--dark); border-radius: 50px;
-  padding: 5px 14px; font-size: 12px; font-weight: 700; color: var(--dark); box-shadow: 2px 2px 0 var(--dark);
-}
- 
-.progress-wrap { margin-bottom: 22px; }
-.progress-meta { display: flex; justify-content: space-between; font-size: 12px; font-weight: 800; color: var(--dark); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.3px; }
-.progress-track { height: 10px; background: var(--light); border-radius: 50px; border: 2px solid var(--dark); overflow: hidden; }
-.progress-fill { height: 100%; background: linear-gradient(90deg, var(--blue), var(--pink)); border-radius: 50px; width: 0%; transition: width 0.5s cubic-bezier(.34,1.2,.64,1); }
- 
-.question-text { font-family: 'Righteous', cursive; font-size: 20px; color: var(--dark); line-height: 1.5; margin-bottom: 20px; min-height: 60px; text-align: left; }
- 
-.options-grid { display: flex; flex-direction: column; gap: 10px; text-align: left; }
-.option {
-  display: flex; align-items: center; gap: 12px; padding: 13px 16px;
-  background: var(--white); border: 2.5px solid var(--dark); border-radius: 14px;
-  cursor: pointer; font-size: 14px; font-weight: 700; color: var(--dark);
-  box-shadow: 3px 3px 0 var(--dark);
-  transition: transform 0.12s, box-shadow 0.12s, background 0.15s, border-color 0.15s;
-  animation: slideIn 0.3s cubic-bezier(.34,1.3,.64,1) backwards;
-}
-.option:nth-child(1) { animation-delay: 0.05s; }
-.option:nth-child(2) { animation-delay: 0.10s; }
-.option:nth-child(3) { animation-delay: 0.15s; }
-.option:nth-child(4) { animation-delay: 0.20s; }
-@keyframes slideIn { from { opacity: 0; transform: translateX(-14px); } to { opacity: 1; transform: translateX(0); } }
-.option:hover { transform: translate(-2px,-2px); box-shadow: 5px 5px 0 var(--blue); border-color: var(--blue); background: #F0F3FF; }
-.option-letter {
-  width: 30px; height: 30px; border-radius: 9px; background: var(--off);
-  border: 2px solid var(--dark); display: flex; align-items: center; justify-content: center;
-  font-size: 12px; font-weight: 800; flex-shrink: 0; font-family: 'Righteous', cursive;
-  transition: background 0.15s, border-color 0.15s;
-}
-.option.correct { background: #EAFFDA; border-color: #3DB838; box-shadow: 3px 3px 0 #3DB838; transform: none; }
-.option.correct .option-letter { background: #3DB838; border-color: #3DB838; color: white; }
-.option.wrong { background: #FFEAEA; border-color: var(--pink); box-shadow: 3px 3px 0 var(--pink); transform: none; }
-.option.wrong .option-letter { background: var(--pink); border-color: var(--pink); color: white; }
- 
-.expl-box {
-  display: none; margin-top: 16px; background: #FFFBE6;
-  border: 2.5px solid var(--orange); border-radius: 14px; padding: 13px 16px;
-  font-size: 13px; font-weight: 600; color: #6B4500; text-align: left; line-height: 1.6;
-  box-shadow: 3px 3px 0 var(--orange);
-}
-.expl-box.show { display: block; animation: popIn 0.3s cubic-bezier(.34,1.3,.64,1); }
-.expl-tag { font-family: 'Righteous', cursive; color: var(--orange); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; display: block; margin-bottom: 4px; }
- 
-.score-block { margin: 10px 0 18px; }
-.score-number { font-family: 'Righteous', cursive; font-size: 76px; color: var(--blue); line-height: 1; text-shadow: 4px 4px 0 var(--dark); }
-.score-denom { font-size: 20px; font-weight: 800; color: var(--grey); }
-.score-pct { display: inline-block; margin-top: 6px; font-size: 13px; font-weight: 800; padding: 4px 16px; border-radius: 50px; border: 2px solid var(--dark); box-shadow: 2px 2px 0 var(--dark); }
- 
-.fb-box { background: var(--off); border: 2.5px solid var(--dark); border-radius: 16px; padding: 16px; margin: 14px 0; box-shadow: 4px 4px 0 var(--dark); text-align: left; }
-.fb-box .fb-emoji { font-size: 28px; margin-bottom: 6px; display: block; }
-.fb-box strong { font-family: 'Righteous', cursive; font-size: 18px; color: var(--dark); display: block; margin-bottom: 4px; }
-.fb-box p { font-size: 13px; color: var(--grey); margin: 0; font-weight: 600; line-height: 1.5; }
- 
-.divider { display: flex; align-items: center; gap: 12px; margin: 22px 0; color: var(--grey); font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; }
-.divider::before, .divider::after { content: ''; flex: 1; height: 2px; background: var(--light); border-radius: 2px; }
- 
-.rev-head { margin-bottom: 16px; }
-.rev-head .r-emoji { font-size: 28px; margin-bottom: 8px; }
-.rev-head h3 { font-family: 'Righteous', cursive; font-size: 22px; color: var(--dark); margin-bottom: 4px; }
-.rev-head p { font-size: 12px; font-weight: 600; color: var(--grey); }
- 
-.sburst { position: absolute; font-size: 14px; pointer-events: none; animation: burstAnim 750ms forwards; }
-@keyframes burstAnim { 0%{opacity:1;transform:translate(0,0) scale(1.3) rotate(0deg)} 100%{opacity:0;transform:translate(var(--bx),var(--by)) scale(0) rotate(180deg)} }
- 
-.hidden { display: none !important; }
+  /* ─── MOBILE ─── */
+  @media (max-width: 768px) {
+    nav { padding: 12px 20px; }
+    .nav-links { display: none; }
+    .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+    .hero-visual { display: none; }
+    section { padding: 60px 20px; }
+    #summer { padding: 60px 20px; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr; gap: 24px; }
+    .device-inner { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .teachers-grid { grid-template-columns: 1fr; }
+    .courses-grid { grid-template-columns: 1fr; }
+    .panel-header { flex-wrap: wrap; }
+    .ph-badge { margin-left: 0; }
+    .admission-banner { flex-wrap: wrap; text-align: center; justify-content: center; }
+    .summer-tabs { flex-direction: column; align-items: center; }
+  }
 </style>
 </head>
 <body>
  
-<!-- ════════════════════════
-     AD OVERLAY
-════════════════════════ -->
-<div id="adOverlay">
-  <div class="stage" id="stage">
- 
-    <!-- START SCREEN -->
-    <div class="start-screen" id="startScreen">
-      <div class="top-blob"></div>
-      <div class="bot-blob"></div>
-      <img class="start-logo" src="https://i.postimg.cc/x9mDND2Q/Ttc-logo.png" alt="TTC">
-      <div class="start-ttc">TTC <span>QUIZ</span></div>
-      <div class="start-tagline">Tushar Tuition Classes · Wardha</div>
-      <div class="start-badge">✅ Version 2.0 — Updated</div>
-      <button class="start-btn" id="startBtn">🚀 Start Now!</button>
-      <div class="start-note">🔊 Turn on sound for best experience</div>
-    </div>
- 
-    <!-- DOTS -->
-    <div class="scene-dots" id="sceneDots" style="opacity:0;transition:opacity 0.4s;">
-      <div class="sdot on" id="d0"></div>
-      <div class="sdot" id="d1"></div>
-      <div class="sdot" id="d2"></div>
-      <div class="sdot" id="d3"></div>
-      <div class="sdot" id="d4"></div>
-    </div>
- 
-    <canvas id="particles"></canvas>
- 
-    <!-- S0: HEY HOOK -->
-    <div class="scene s0" id="s0">
-      <div class="dots-bg"></div>
-      <div class="hey-emoji">🎉</div>
-      <div class="hey-text">HEY!</div>
-      <div class="hey-sub">Something awesome just dropped!</div>
-      <div class="pill-row">
-        <div class="pill">✨ New</div>
-        <div class="pill">🆓 Free</div>
-        <div class="pill">⚡ Updated</div>
-      </div>
-    </div>
- 
-    <!-- S1: COUNTDOWN -->
-    <div class="scene s1" id="s1">
-      <div class="cd-ring">
-        <div class="cd-ring-inner">
-          <div class="cd-num" id="cdNum">3</div>
-        </div>
-      </div>
-      <div class="cd-label">GET READY!</div>
-    </div>
- 
-    <!-- S2: TITLE BLAST -->
-    <div class="scene s2" id="s2">
-      <div class="burst-bg"></div>
-      <div class="logo-ring">
-        <img src="https://i.postimg.cc/x9mDND2Q/Ttc-logo.png" alt="TTC">
-      </div>
-      <div class="big-ttc">TTC</div>
-      <div class="big-quiz">QUIZ</div>
-      <div class="v2-tag">✅ VERSION 2.0 — UPDATED</div>
-    </div>
- 
-    <!-- S3: FEATURES -->
-    <div class="scene s3" id="s3">
-      <div class="feat-title">✨ What's Inside?</div>
-      <div class="feat-list">
-        <div class="fcard c1">
-          <div class="ficon">📐</div>
-          <div class="finfo">
-            <div class="flabel">Subject</div>
-            <div class="fval">Maths · Combined</div>
-          </div>
-        </div>
-        <div class="fcard c2">
-          <div class="ficon">🎯</div>
-          <div class="finfo">
-            <div class="flabel">Challenge</div>
-            <div class="fval">30 Questions</div>
-          </div>
-          <div class="fbadge new">NEW</div>
-        </div>
-        <div class="fcard c3">
-          <div class="ficon">💡</div>
-          <div class="finfo">
-            <div class="flabel">Mode</div>
-            <div class="fval">Instant Explanations</div>
-          </div>
-          <div class="fbadge v2">V2</div>
-        </div>
-        <div class="fcard c4">
-          <div class="ficon">📤</div>
-          <div class="finfo">
-            <div class="flabel">Share</div>
-            <div class="fval">WhatsApp Your Score!</div>
-          </div>
-        </div>
-      </div>
-    </div>
- 
-    <!-- S4: UPDATE REVEAL -->
-    <div class="scene s4" id="s4">
-      <div class="confetti-bg"></div>
-      <div class="zigzag"></div>
-      <div class="zigzag-bot"></div>
-      <div class="update-badge">🚀 BIG UPDATE</div>
-      <div class="update-headline">BIGGER<br>&amp; BETTER!</div>
-      <div class="update-items">
-        <div class="uitem"><div class="uicon">⚡</div><div class="utxt">Faster &amp; smoother than ever</div></div>
-        <div class="uitem"><div class="uicon">🏆</div><div class="utxt">Scored + full explanations</div></div>
-        <div class="uitem"><div class="uicon">💬</div><div class="utxt">Share results on WhatsApp</div></div>
-      </div>
-    </div>
- 
-    <!-- S5: CTA -->
-    <div class="scene s5" id="s5">
-      <div class="top-wave"></div>
-      <div class="stars-row">
-        <span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span>
-      </div>
-      <div class="cta-logo-wrap">
-        <img src="https://i.postimg.cc/x9mDND2Q/Ttc-logo.png" alt="TTC">
-      </div>
-      <div class="cta-main-title">TTC <span>QUIZ</span></div>
-      <div class="cta-subtitle">is here! 🎉</div>
-      <div class="tag-row">
-        <div class="tag t1">Free</div>
-        <div class="tag t2">Instant</div>
-        <div class="tag t3">Fun!</div>
-      </div>
-      <button class="play-btn" onclick="launchQuiz()">▶ Play Now!</button>
-      <div class="cta-tagline">Tushar Tuition Classes · Wardha</div>
-    </div>
- 
-    <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
-    <button class="replay-btn" id="replayBtn" onclick="startAd()">↺ Replay</button>
+<!-- SUMMER RIBBON -->
+<div id="summer-ribbon" onclick="document.getElementById('summer').scrollIntoView({behavior:'smooth'})">
+  <div class="ribbon-inner">
+    <span class="ribbon-pulse"></span>
+    <span class="ribbon-badge">🌞 New</span>
+    <span>TTC Summer Classes 2026 — Admissions Opening <strong>15th April 2026!</strong> Foundation &amp; Advanced Batches Available</span>
+    <span style="opacity:0.7;font-size:0.75rem;">Click to know more ↓</span>
   </div>
 </div>
  
-<!-- ════════════════════════
-     QUIZ APP
-════════════════════════ -->
-<div class="app" id="quizApp">
- 
-  <!-- NAME SCREEN -->
-  <div id="nameScreen" class="screen active">
-    <div class="card" style="display:flex;flex-direction:column;align-items:center;">
-      <img src="https://i.postimg.cc/x9mDND2Q/Ttc-logo.png" class="logo" alt="TTC">
-      <div class="chip">✦ TTC Wardha</div>
-      <h2>Hey there!<br>What's your name?</h2>
-      <p class="sub">Enter your name to start the quiz 🎯</p>
-      <input id="username" class="input-field" type="text" placeholder="Your full name..." autocomplete="off">
-      <button class="btn btn-blue" onclick="startWelcome()">Continue →</button>
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-brand">
+    <img src="https://i.postimg.cc/x9mDND2Q/Ttc-logo.png" alt="TTC Logo" onerror="this.style.display='none'">
+    <div>
+      <div class="nav-brand-text">TTC Wardha</div>
+      <div class="nav-brand-sub">Tushar Tuition Classes</div>
     </div>
   </div>
+  <div class="nav-links">
+    <a href="#subjects">Subjects</a>
+    <a href="#teachers">Teachers</a>
+    <a href="#summer" class="nav-summer">☀️ Summer Classes</a>
+    <a href="#faq">FAQ</a>
+    <a href="#contact" class="nav-cta">Enroll Now</a>
+  </div>
+</nav>
  
-  <!-- WELCOME SCREEN -->
-  <div id="welcomeScreen" class="screen">
-    <div class="card">
-      <img src="https://i.postimg.cc/x9mDND2Q/Ttc-logo.png" class="logo" alt="TTC">
-      <div class="chip">✦ You're up!</div>
-      <h2 id="welcomeText"></h2>
-      <p class="sub">Ready to prove yourself? 💪</p>
-      <div class="info-strip">
-        <div class="info-pill">📐 Maths – Combined</div>
-        <div class="info-pill">30 Questions</div>
-        <div class="info-pill">🏆 Scored</div>
-        <div class="info-pill">⏱ Self-paced</div>
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-blob blob-1"></div>
+  <div class="hero-blob blob-2"></div>
+  <div class="hero-blob blob-3"></div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Now Enrolling • Classes 1–9
       </div>
-      <button class="btn btn-blue" onclick="startQuiz()">Start Quiz 🚀</button>
+      <h1 class="hero-title">
+        Learn Better,<br>
+        Grow <span>Smarter</span>
+      </h1>
+      <p class="hero-desc">
+        Tushar Tuition Classes in Wardha offers quality, personalized coaching for Classes 1–9 in Maths, Science, Languages, and more. Small batches, big results.
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">📝 Enroll Today</a>
+        <a href="#summer" class="btn-summer">☀️ Summer Classes</a>
+        <a href="#teachers" class="btn-secondary">👩‍🏫 Our Teachers</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-num">9+</div><div class="stat-label">Subjects</div></div>
+        <div class="stat"><div class="stat-num">4–8 PM</div><div class="stat-label">Daily Classes</div></div>
+        <div class="stat"><div class="stat-num">Wardha</div><div class="stat-label">Location</div></div>
+      </div>
     </div>
-  </div>
- 
-  <!-- QUIZ SCREEN -->
-  <div id="quizScreen" class="screen">
-    <div class="card">
-      <img src="https://i.postimg.cc/x9mDND2Q/Ttc-logo.png" class="logo" alt="TTC">
-      <div class="progress-wrap">
-        <div class="progress-meta">
-          <span id="qCounter">Q 1 / 30</span>
-          <span id="qScore">Score: 0</span>
+    <div class="hero-visual">
+      <div class="hero-card-stack">
+        <div class="hero-card hc-main">
+          <div class="hc-icon">📖</div>
+          <div class="hc-label">Expert Teaching</div>
+          <div class="hc-sub">Small Batches • Personal Attention</div>
         </div>
-        <div class="progress-track">
-          <div class="progress-fill" id="progressBar"></div>
+        <div class="hero-card hc-2">
+          <div class="hc-icon">🏆</div>
+          <div class="hc-label">Top Results</div>
+          <div class="hc-sub">Personalized Attention</div>
         </div>
-      </div>
-      <p class="question-text" id="question"></p>
-      <div class="options-grid" id="options"></div>
-      <div class="expl-box" id="explBox">
-        <span class="expl-tag">💡 Explanation</span>
-        <span id="explText"></span>
-      </div>
-      <br>
-      <button id="nextBtn" class="btn btn-blue hidden" onclick="nextQuestion()">Next Question →</button>
-    </div>
-  </div>
- 
-  <!-- RESULT SCREEN -->
-  <div id="resultScreen" class="screen">
-    <div class="card">
-      <img src="https://i.postimg.cc/x9mDND2Q/Ttc-logo.png" class="logo" alt="TTC">
-      <div class="chip" id="resultChip">✦ Quiz Done!</div>
-      <div class="score-block">
-        <div>
-          <span class="score-number" id="scoreNum">0</span>
-          <span class="score-denom" id="scoreDenom">/30</span>
+        <div class="hero-card hc-3">
+          <div class="hc-icon">⏰</div>
+          <div class="hc-label">4 PM – 8 PM</div>
+          <div class="hc-sub">Mon to Sat</div>
         </div>
-        <div class="score-pct" id="scorePct">0%</div>
-      </div>
-      <div class="fb-box">
-        <span class="fb-emoji" id="fbEmoji"></span>
-        <strong id="fbTitle"></strong>
-        <p id="fbMsg"></p>
-      </div>
-      <button class="btn btn-green" onclick="shareWhatsApp()">📤 Share on WhatsApp</button>
-      <button id="ratingBtn" class="btn btn-pink">⭐ Rate Us on Google</button>
-      <button class="btn btn-ghost" onclick="restartQuiz()">↺ Try Again</button>
-      <div class="divider">What others say</div>
-      <div class="rev-head">
-        <div class="r-emoji">🌟</div>
-        <h3>Loved by TTC Families</h3>
-        <p>Real reviews from students &amp; parents across Wardha</p>
-      </div>
-      <a href="https://g.page/r/CdUkswJ0ZulAEBE/review" target="_blank" class="btn btn-lime" style="display:block;text-align:center;">✍️ Give Us a Review</a>
-      <div style="margin-top:20px;">
-        <div class="famewall-embed" data-src="https---maps-app-goo-gl-CCkEWRVgjbvHpQmLA" data-format="grid" style="width:100%;min-height:300px;"></div>
-        <script type="text/javascript" src="https://embed.famewall.io/frame.js" defer></script>
+        <div class="hero-card hc-summer">
+          <div class="hc-icon">☀️</div>
+          <div class="hc-label">Summer Classes</div>
+          <div class="hc-sub">Opens 15th April!</div>
+        </div>
       </div>
     </div>
   </div>
+</section>
  
+<!-- ═══════════════════════════════════════════
+     SUMMER CLASSES SECTION
+═══════════════════════════════════════════ -->
+<section id="summer">
+  <!-- Decorative blobs -->
+  <div class="summer-deco sd-1"></div>
+  <div class="summer-deco sd-2"></div>
+  <div class="summer-deco sd-3"></div>
+ 
+  <div class="section-inner">
+    <!-- Header -->
+    <div class="summer-header reveal">
+      <div class="summer-tag">☀️ Limited Seats • Summer 2026</div>
+      <h2 class="summer-title">TTC <span class="highlight">Summer Classes</span><br>Are Coming!</h2>
+      <p class="summer-subtitle">Two specially designed programmes — Foundation for Class 1–6 and Advanced Gap-Filling for Class 7–9. Give your child the head-start they deserve this summer.</p>
+      <div class="admission-banner">
+        <span class="ab-icon">🗓️</span>
+        <div class="ab-text">
+          <strong>Admissions Opening</strong>
+          <span>Register your interest now!</span>
+        </div>
+        <div class="ab-date">📅 15th April, 2026</div>
+      </div>
+    </div>
+ 
+    <!-- Tab Switcher -->
+    <div class="summer-tabs reveal">
+      <button class="summer-tab foundation active" onclick="switchTab('foundation')">🌱 Foundation Classes · Class 1–6</button>
+      <button class="summer-tab advanced" onclick="switchTab('advanced')">🚀 Advanced Classes · Class 7–9</button>
+    </div>
+ 
+    <!-- FOUNDATION PANEL -->
+    <div class="summer-panel foundation-panel active" id="panel-foundation">
+      <div class="panel-header reveal">
+        <span class="ph-icon">🌱</span>
+        <div class="ph-info">
+          <div class="ph-title">TTC Foundation Classes</div>
+          <div class="ph-desc">Best suited for weak students. Specially designed for Class 1–6 to build a strong academic foundation before the new school year begins.</div>
+        </div>
+        <div class="ph-badge">Class 1 – 6</div>
+      </div>
+      <div class="courses-grid">
+ 
+        <div class="course-card reveal">
+          <div class="cc-top">
+            <div class="cc-icon-wrap">📖</div>
+            <div class="cc-fee-tag">₹ 500</div>
+          </div>
+          <div class="cc-name">Hindi Reading Practice</div>
+          <div class="cc-topics">
+            <span class="topic-chip">Fluency</span>
+            <span class="topic-chip">Expression</span>
+            <span class="topic-chip">Comprehension</span>
+            <span class="topic-chip">Vocabulary</span>
+          </div>
+        </div>
+ 
+        <div class="course-card reveal">
+          <div class="cc-top">
+            <div class="cc-icon-wrap">🔤</div>
+            <div class="cc-fee-tag">₹ 500</div>
+          </div>
+          <div class="cc-name">English Reading Practice + Phonics</div>
+          <div class="cc-topics">
+            <span class="topic-chip">Phonics</span>
+            <span class="topic-chip">Sight Words</span>
+            <span class="topic-chip">Reading Aloud</span>
+            <span class="topic-chip">Comprehension</span>
+          </div>
+        </div>
+ 
+        <div class="course-card reveal">
+          <div class="cc-top">
+            <div class="cc-icon-wrap">✍️</div>
+            <div class="cc-fee-tag">₹ 500</div>
+          </div>
+          <div class="cc-name">Hindi Handwriting Practice</div>
+          <div class="cc-topics">
+            <span class="topic-chip">Letter Formation</span>
+            <span class="topic-chip">Spacing</span>
+            <span class="topic-chip">Matras</span>
+            <span class="topic-chip">Consistency</span>
+          </div>
+        </div>
+ 
+        <div class="course-card reveal">
+          <div class="cc-top">
+            <div class="cc-icon-wrap">✏️</div>
+            <div class="cc-fee-tag">₹ 500</div>
+          </div>
+          <div class="cc-name">English Handwriting Practice</div>
+          <div class="cc-topics">
+            <span class="topic-chip">Grip Correction</span>
+            <span class="topic-chip">Letter Forms</span>
+            <span class="topic-chip">Baseline</span>
+            <span class="topic-chip">Neatness</span>
+          </div>
+        </div>
+ 
+        <div class="course-card reveal">
+          <div class="cc-top">
+            <div class="cc-icon-wrap">🖊️</div>
+            <div class="cc-fee-tag">₹ 500</div>
+          </div>
+          <div class="cc-name">English Cursive Writing</div>
+          <div class="cc-topics">
+            <span class="topic-chip">Cursive Letters</span>
+            <span class="topic-chip">Joining</span>
+            <span class="topic-chip">Flow</span>
+            <span class="topic-chip">Speed Writing</span>
+          </div>
+        </div>
+ 
+        <div class="course-card reveal">
+          <div class="cc-top">
+            <div class="cc-icon-wrap">🔢</div>
+            <div class="cc-fee-tag">₹ 600</div>
+          </div>
+          <div class="cc-name">Basic Maths</div>
+          <div class="cc-topics">
+            <span class="topic-chip">Tables 2–20</span>
+            <span class="topic-chip">Fractions</span>
+            <span class="topic-chip">BODMAS</span>
+            <span class="topic-chip">Word Problems</span>
+            <span class="topic-chip">Place Value</span>
+          </div>
+        </div>
+ 
+        <div class="course-card reveal">
+          <div class="cc-top">
+            <div class="cc-icon-wrap">📝</div>
+            <div class="cc-fee-tag">₹ 500</div>
+          </div>
+          <div class="cc-name">Basic Grammar</div>
+          <div class="cc-topics">
+            <span class="topic-chip">Parts of Speech</span>
+            <span class="topic-chip">Articles</span>
+            <span class="topic-chip">Tenses</span>
+            <span class="topic-chip">Punctuation</span>
+            <span class="topic-chip">Sentences</span>
+          </div>
+        </div>
+ 
+      </div>
+    </div>
+ 
+    <!-- ADVANCED PANEL -->
+    <div class="summer-panel advanced-panel" id="panel-advanced">
+      <div class="panel-header reveal">
+        <span class="ph-icon">🚀</span>
+        <div class="ph-info">
+          <div class="ph-title">TTC Advanced Classes</div>
+          <div class="ph-desc">Specially designed for Class 7th and above to strengthen weak areas and fill critical learning gaps before the new academic year begins.</div>
+        </div>
+        <div class="ph-badge">Class 7 – 9</div>
+      </div>
+      <div class="courses-grid">
+ 
+        <div class="course-card reveal">
+          <div class="cc-top">
+            <div class="cc-icon-wrap">✍️</div>
+            <div class="cc-fee-tag">₹ 700</div>
+          </div>
+          <div class="cc-name">Answer Framing & Exam Writing Skills</div>
+          <div class="cc-topics">
+            <span class="topic-chip">Decode Questions</span>
+            <span class="topic-chip">1/3/5 Mark Answers</span>
+            <span class="topic-chip">Grammar in Writing</span>
+            <span class="topic-chip">Time Management</span>
+            <span class="topic-chip">Board-style Practice</span>
+          </div>
+        </div>
+ 
+        <div class="course-card reveal">
+          <div class="cc-top">
+            <div class="cc-icon-wrap">📐</div>
+            <div class="cc-fee-tag">₹ 800</div>
+          </div>
+          <div class="cc-name">Fundamentals of Maths</div>
+          <div class="cc-topics">
+            <span class="topic-chip">Integers</span>
+            <span class="topic-chip">LCM / HCF</span>
+            <span class="topic-chip">Algebra</span>
+            <span class="topic-chip">Solve for x</span>
+            <span class="topic-chip">Percentage</span>
+            <span class="topic-chip">Ratio & Fractions</span>
+            <span class="topic-chip">Statistics</span>
+          </div>
+        </div>
+ 
+        <div class="course-card reveal">
+          <div class="cc-top">
+            <div class="cc-icon-wrap">⚗️</div>
+            <div class="cc-fee-tag">₹ 700</div>
+          </div>
+          <div class="cc-name">Chemistry Basics</div>
+          <div class="cc-topics">
+            <span class="topic-chip">Matter & Types</span>
+            <span class="topic-chip">Physical/Chemical Changes</span>
+            <span class="topic-chip">Elements & Compounds</span>
+            <span class="topic-chip">Atoms & Molecules</span>
+            <span class="topic-chip">Chemical Formulae</span>
+            <span class="topic-chip">Equation Balancing</span>
+          </div>
+        </div>
+ 
+        <div class="course-card reveal">
+          <div class="cc-top">
+            <div class="cc-icon-wrap">⚡</div>
+            <div class="cc-fee-tag">₹ 700</div>
+          </div>
+          <div class="cc-name">Basics of Physics</div>
+          <div class="cc-topics">
+            <span class="topic-chip">Force & Motion</span>
+            <span class="topic-chip">Work & Energy</span>
+            <span class="topic-chip">Basic Electricity</span>
+            <span class="topic-chip">Reflection of Light</span>
+            <span class="topic-chip">Refraction</span>
+            <span class="topic-chip">Convex/Concave Lens</span>
+          </div>
+        </div>
+ 
+        <div class="course-card reveal">
+          <div class="cc-top">
+            <div class="cc-icon-wrap">🧬</div>
+            <div class="cc-fee-tag">₹ 700</div>
+          </div>
+          <div class="cc-name">Basics of Biology</div>
+          <div class="cc-topics">
+            <span class="topic-chip">Cell Structure</span>
+            <span class="topic-chip">Digestive System</span>
+            <span class="topic-chip">Respiratory System</span>
+            <span class="topic-chip">Circulatory System</span>
+            <span class="topic-chip">Photosynthesis</span>
+            <span class="topic-chip">Respiration</span>
+          </div>
+        </div>
+ 
+        <div class="course-card reveal">
+          <div class="cc-top">
+            <div class="cc-icon-wrap">📚</div>
+            <div class="cc-fee-tag">₹ 700</div>
+          </div>
+          <div class="cc-name">Advanced English Grammar</div>
+          <div class="cc-topics">
+            <span class="topic-chip">All Tenses</span>
+            <span class="topic-chip">Have/Has/Had</span>
+            <span class="topic-chip">Do/Does/Did</span>
+            <span class="topic-chip">Active & Passive Voice</span>
+            <span class="topic-chip">Direct/Indirect Speech</span>
+            <span class="topic-chip">Subject-Verb Agreement</span>
+          </div>
+        </div>
+ 
+      </div>
+    </div>
+ 
+    <!-- CTA -->
+    <div class="summer-cta-wrap reveal">
+      <p>🗓️ Admissions open on <strong>15th April, 2026</strong> — Limited seats per batch!</p>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+        <a href="#contact" class="btn-summer">📝 Pre-Register Interest</a>
+        <a href="https://wa.me/917517445450" target="_blank" class="btn-secondary">💬 WhatsApp Us</a>
+      </div>
+    </div>
+ 
+  </div>
+</section>
+ 
+<!-- SUBJECTS -->
+<section id="subjects">
+  <div class="section-inner">
+    <div class="section-tag">📚 What We Teach</div>
+    <h2 class="section-title">Subjects We Cover</h2>
+    <p class="section-desc">Comprehensive coaching across all core subjects to help your child excel.</p>
+    <div class="subjects-grid">
+      <div class="subject-pill" style="animation-delay:0.05s"><span class="pill-icon">🔢</span>Maths</div>
+      <div class="subject-pill" style="animation-delay:0.1s"><span class="pill-icon">✏️</span>English</div>
+      <div class="subject-pill" style="animation-delay:0.15s"><span class="pill-icon">🔬</span>Science</div>
+      <div class="subject-pill" style="animation-delay:0.2s"><span class="pill-icon">⚗️</span>Chemistry</div>
+      <div class="subject-pill" style="animation-delay:0.25s"><span class="pill-icon">⚡</span>Physics</div>
+      <div class="subject-pill" style="animation-delay:0.3s"><span class="pill-icon">🧬</span>Biology</div>
+      <div class="subject-pill" style="animation-delay:0.35s"><span class="pill-icon">🌏</span>Geography</div>
+      <div class="subject-pill" style="animation-delay:0.4s"><span class="pill-icon">🏛️</span>History</div>
+      <div class="subject-pill" style="animation-delay:0.45s"><span class="pill-icon">⚖️</span>Civics</div>
+      <div class="subject-pill" style="animation-delay:0.5s"><span class="pill-icon">💹</span>Economics</div>
+      <div class="subject-pill" style="animation-delay:0.55s"><span class="pill-icon">🔤</span>Hindi</div>
+      <div class="subject-pill" style="animation-delay:0.6s"><span class="pill-icon">📝</span>Marathi</div>
+      <div class="subject-pill" style="animation-delay:0.65s"><span class="pill-icon">🌟</span>G.K.</div>
+      <div class="subject-pill" style="animation-delay:0.7s"><span class="pill-icon">💻</span>M.S. / Computer</div>
+      <div class="subject-pill" style="animation-delay:0.75s"><span class="pill-icon">🗺️</span>S.S.T.</div>
+    </div>
+  </div>
+</section>
+ 
+<!-- TEACHERS -->
+<section id="teachers">
+  <div class="section-inner">
+    <div class="section-tag">👩‍🏫 Our Team</div>
+    <h2 class="section-title">Meet Your Educators</h2>
+    <p class="section-desc">Dedicated, qualified teachers committed to every student's success.</p>
+    <div class="teachers-grid">
+      <div class="teacher-card tc-1">
+        <div class="teacher-banner"><div class="teacher-avatar">T</div></div>
+        <div class="teacher-body">
+          <div class="teacher-name">Tushar Nanwani</div>
+          <div class="teacher-role">Founder & Head Teacher</div>
+          <div class="teacher-subjects">
+            <span class="subj-tag">✏️ English</span>
+            <span class="subj-tag">🔢 Maths</span>
+            <span class="subj-tag">💹 Economics</span>
+          </div>
+        </div>
+      </div>
+      <div class="teacher-card tc-2">
+        <div class="teacher-banner"><div class="teacher-avatar">M</div></div>
+        <div class="teacher-body">
+          <div class="teacher-name">Mahek Nanwani</div>
+          <div class="teacher-role">Science & Social Studies</div>
+          <div class="teacher-subjects">
+            <span class="subj-tag">⚡ Physics</span>
+            <span class="subj-tag">⚗️ Chemistry</span>
+            <span class="subj-tag">🧬 Biology</span>
+            <span class="subj-tag">🏛️ History</span>
+            <span class="subj-tag">⚖️ Civics</span>
+            <span class="subj-tag">🌏 Geography</span>
+          </div>
+        </div>
+      </div>
+      <div class="teacher-card tc-3">
+        <div class="teacher-banner"><div class="teacher-avatar">K</div></div>
+        <div class="teacher-body">
+          <div class="teacher-name">Kajal Nanwani</div>
+          <div class="teacher-role">Languages & Technology</div>
+          <div class="teacher-subjects">
+            <span class="subj-tag">🔤 Hindi</span>
+            <span class="subj-tag">📝 Marathi</span>
+            <span class="subj-tag">🌟 G.K.</span>
+            <span class="subj-tag">💻 M.S.</span>
+            <span class="subj-tag">🖥️ Computer</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- CLASSES & INFO -->
+<section id="classes">
+  <div class="section-inner">
+    <div class="section-tag">🎒 Eligibility</div>
+    <h2 class="section-title">Classes We Serve</h2>
+    <p class="section-desc">We welcome students from Class 1st through Class 9th.</p>
+    <div class="class-scroll">
+      <div class="class-chip"><div class="chip-num">1<sup>st</sup></div><div class="chip-label">Class</div></div>
+      <div class="class-chip"><div class="chip-num">2<sup>nd</sup></div><div class="chip-label">Class</div></div>
+      <div class="class-chip"><div class="chip-num">3<sup>rd</sup></div><div class="chip-label">Class</div></div>
+      <div class="class-chip"><div class="chip-num">4<sup>th</sup></div><div class="chip-label">Class</div></div>
+      <div class="class-chip"><div class="chip-num">5<sup>th</sup></div><div class="chip-label">Class</div></div>
+      <div class="class-chip"><div class="chip-num">6<sup>th</sup></div><div class="chip-label">Class</div></div>
+      <div class="class-chip"><div class="chip-num">7<sup>th</sup></div><div class="chip-label">Class</div></div>
+      <div class="class-chip"><div class="chip-num">8<sup>th</sup></div><div class="chip-label">Class</div></div>
+      <div class="class-chip"><div class="chip-num">9<sup>th</sup></div><div class="chip-label">Class</div></div>
+    </div>
+    <div class="info-cards reveal">
+      <div class="info-stat-card"><span class="isc-icon">⏰</span><div class="isc-value">4 PM – 8 PM</div><div class="isc-label">Afternoon Timings</div></div>
+      <div class="info-stat-card"><span class="isc-icon">📍</span><div class="isc-value">Wardha</div><div class="isc-label">Maharashtra, India</div></div>
+      <div class="info-stat-card"><span class="isc-icon">🏫</span><div class="isc-value">STATE · CBSE · ICSE</div><div class="isc-label">Boards Covered</div></div>
+      <div class="info-stat-card"><span class="isc-icon">📚</span><div class="isc-value">1st – 9th</div><div class="isc-label">Standards Covered</div></div>
+    </div>
+  </div>
+</section>
+ 
+<!-- WHY TTC -->
+<section id="preview">
+  <div class="section-inner">
+    <div class="section-tag">✨ Why TTC?</div>
+    <h2 class="section-title">Everything Your Child Needs</h2>
+    <p class="section-desc" style="margin:auto;text-align:center;">A nurturing environment where every student gets the attention and guidance to shine.</p>
+    <div class="scroll-device-wrap reveal">
+      <div class="device">
+        <div class="device-inner">
+          <div class="device-text">
+            <h2>Learning made<br>personal & fun</h2>
+            <p>At TTC Wardha, we believe every child learns differently. Our teachers adapt their style to match each student's pace and learning needs.</p>
+          </div>
+          <div class="device-cards">
+            <div class="dc"><div class="dc-icon dc-i1">📊</div><div><div class="dc-title">Regular Progress Tests</div><div class="dc-sub">Track improvement every week</div></div></div>
+            <div class="dc"><div class="dc-icon dc-i2">📞</div><div><div class="dc-title">Parent Updates</div><div class="dc-sub">Stay informed about your child</div></div></div>
+            <div class="dc"><div class="dc-icon dc-i3">🏅</div><div><div class="dc-title">Holistic Learning</div><div class="dc-sub">Academics + life skills</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-inner">
+    <div class="section-tag">❓ FAQ</div>
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    <div class="faq-list">
+ 
+      <div class="faq-item">
+        <div class="faq-q">Which classes do you teach? <span class="faq-chevron">▾</span></div>
+        <div class="faq-a">We teach students from Class 1st to Class 9th across all major boards.</div>
+      </div>
+ 
+      <div class="faq-item">
+        <div class="faq-q">Which subjects are covered? <span class="faq-chevron">▾</span></div>
+        <div class="faq-a">We cover Maths, English, Science (Physics, Chemistry, Biology), Social Studies (History, Civics, Geography), Economics, Hindi, Marathi, G.K., M.S., and Computer.</div>
+      </div>
+ 
+      <div class="faq-item">
+        <div class="faq-q">☀️ Tell me about Summer Classes? <span class="faq-chevron">▾</span></div>
+        <div class="faq-a">TTC offers two summer programmes: <strong>Foundation Classes</strong> for Class 1–6 (reading, handwriting, basic maths, grammar) and <strong>Advanced Classes</strong> for Class 7–9 (answer writing, maths fundamentals, science basics, grammar). Admissions open <strong>15th April, 2026</strong>. Fees range from ₹500 to ₹800 per course depending on the subject.</div>
+      </div>
+ 
+      <div class="faq-item">
+        <div class="faq-q">⏰ What are the tuition timings? <span class="faq-chevron">▾</span></div>
+        <div class="faq-a">
+          <div class="faq-timing-grid">
+            <div class="faq-batch">
+              <span class="faq-batch-icon">🌅</span>
+              <strong>Morning Batch</strong>
+              <span>6:00 AM Onwards</span>
+              <span class="faq-batch-note">📌 Exam period only</span>
+            </div>
+            <div class="faq-batch">
+              <span class="faq-batch-icon">☀️</span>
+              <strong>Noon Batch</strong>
+              <span>1:00 PM – 3:00 PM</span>
+              <span class="faq-batch-note">📌 Exam period only</span>
+            </div>
+            <div class="faq-batch">
+              <span class="faq-batch-icon">🌤️</span>
+              <strong>Afternoon Batch</strong>
+              <span>4:00–4:30 PM to 6:00–6:30 PM</span>
+              <span>5:00 PM – 8:00 PM</span>
+            </div>
+          </div>
+          <p style="margin-top:10px;font-size:0.82rem;color:var(--coral);font-weight:700;">⚠️ Morning &amp; Noon batches are available during exam period only.</p>
+        </div>
+      </div>
+ 
+      <div class="faq-item">
+        <div class="faq-q">How can I enroll my child? <span class="faq-chevron">▾</span></div>
+        <div class="faq-a">You can fill out the contact form below, call us, or visit our tuition center in Wardha directly to enroll.</div>
+      </div>
+ 
+      <div class="faq-item">
+        <div class="faq-q">📝 What about tests? <span class="faq-chevron">▾</span></div>
+        <div class="faq-a">Weekly tests are conducted every <strong>Sunday</strong>. Results are updated to parents via <strong>WhatsApp</strong> so you're always in the loop about your child's progress.</div>
+      </div>
+ 
+      <div class="faq-item">
+        <div class="faq-q">🎉 What about Masti and Fun? <span class="faq-chevron">▾</span></div>
+        <div class="faq-a">At TTC, we believe a student learns and understands better when they are <strong>not forced or pressurized</strong>. Our teachers teach in a fun, engaging way that keeps students attentive and genuinely interested in learning.</div>
+      </div>
+ 
+      <div class="faq-item">
+        <div class="faq-q">⚖️ What about strictness? <span class="faq-chevron">▾</span></div>
+        <div class="faq-a">Teachers at TTC are <strong>equally strict when necessary</strong>. We maintain the perfect balance between a fun learning environment and discipline to ensure the best outcomes for every student.</div>
+      </div>
+ 
+      <div class="faq-item">
+        <div class="faq-q">📚 What about notes &amp; study materials? <span class="faq-chevron">▾</span></div>
+        <div class="faq-a">TTC provides <strong>Notes, Worksheets, Practice Papers,</strong> and <strong>Tests</strong> — all included. Special notes specifically demanded by students are also provided on request.</div>
+      </div>
+ 
+      <div class="faq-item">
+        <div class="faq-q">💰 What is the fees structure? <span class="faq-chevron">▾</span></div>
+        <div class="faq-a">For regular fee details, please <strong>contact us</strong> using the form below or <strong>visit us at the centre</strong> directly. For Summer Classes, fees range from <strong>₹500–₹800 per course</strong> depending on the subject.</div>
+      </div>
+ 
+      <div class="faq-item">
+        <div class="faq-q">👩‍🏫 How many teachers are there? <span class="faq-chevron">▾</span></div>
+        <div class="faq-a">TTC has <strong>4 dedicated teachers</strong>, including <strong>1 teacher specifically appointed for asking questions orally</strong> to strengthen students' verbal understanding and confidence.</div>
+      </div>
+ 
+    </div>
+  </div>
+</section>
+ 
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="section-inner">
+    <div class="section-tag reveal">⭐ Reviews</div>
+    <h2 class="section-title reveal">What Parents Say</h2>
+    <p class="section-desc reveal" style="margin:auto;">Real feedback from families who trust TTC Wardha.</p>
+    <div class="reveal" style="margin-top:36px;min-height:260px;">
+      <script src="https://elfsightcdn.com/platform.js" async></script>
+      <div class="elfsight-app-e87fdd6e-f4b8-4807-89b4-ecc80ca4f3c0" data-elfsight-app-lazy></div>
+      <div id="review-placeholder" style="display:flex;gap:20px;flex-wrap:wrap;justify-content:center;margin-top:10px;">
+        <div class="review-card-placeholder"><div class="rcp-stars">⭐⭐⭐⭐⭐</div><div class="rcp-text">"Excellent teaching quality. My child's marks improved significantly!"</div><div class="rcp-name">— Parent, Wardha</div></div>
+        <div class="review-card-placeholder"><div class="rcp-stars">⭐⭐⭐⭐⭐</div><div class="rcp-text">"Very dedicated teachers. My daughter loves going to TTC."</div><div class="rcp-name">— Parent, Wardha</div></div>
+        <div class="review-card-placeholder"><div class="rcp-stars">⭐⭐⭐⭐⭐</div><div class="rcp-text">"Best tuition classes in Wardha. Highly recommended!"</div><div class="rcp-name">— Parent, Wardha</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="section-tag">📬 Get In Touch</div>
+    <h2 class="section-title">Enroll Your Child Today</h2>
+    <div class="contact-grid">
+      <div class="contact-info reveal">
+        <p style="color:var(--muted);line-height:1.7;font-size:0.95rem;margin-bottom:10px;">
+          Ready to give your child the academic edge they deserve? Reach out to us and we'll help you get started.
+        </p>
+        <div class="ci-item"><div class="ci-icon">📍</div><div class="ci-text"><strong>Location</strong><span>Wardha, Maharashtra, India</span></div></div>
+        <div class="ci-item"><div class="ci-icon">⏰</div><div class="ci-text"><strong>Class Timings</strong><span>4:00 PM – 8:00 PM, Mon–Sat</span></div></div>
+        <div class="ci-item"><div class="ci-icon">🎒</div><div class="ci-text"><strong>Classes Available</strong><span>1st Standard to 9th Standard</span></div></div>
+        <div class="ci-item"><div class="ci-icon">☀️</div><div class="ci-text"><strong>Summer Classes</strong><span>Admissions open 15th April, 2026</span></div></div>
+      </div>
+      <div class="contact-form reveal">
+        <div id="form-success" style="display:none;text-align:center;padding:40px 20px;">
+          <div style="font-size:3.5rem;margin-bottom:16px;">🎉</div>
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:10px;color:var(--text);">Message Sent!</h3>
+          <p style="color:var(--muted);line-height:1.7;">We've received your enquiry and will get back to you shortly. Welcome to the TTC family!</p>
+          <button onclick="resetForm()" style="margin-top:20px;background:var(--coral);color:white;border:none;padding:12px 28px;border-radius:40px;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.95rem;cursor:pointer;">Send Another Message</button>
+        </div>
+        <div id="form-error" style="display:none;background:#fff0f0;border:2px solid var(--coral);border-radius:12px;padding:14px 18px;margin-bottom:16px;color:var(--coral);font-weight:700;font-size:0.88rem;">⚠️ Something went wrong. Please try again or contact us directly.</div>
+        <form id="contact-form">
+          <div class="form-row">
+            <div class="form-group"><label>Student Name *</label><input type="text" name="student_name" id="f-name" placeholder="Full name" required></div>
+            <div class="form-group">
+              <label>Class / Standard *</label>
+              <select name="class" id="f-class" required>
+                <option value="">Select Class</option>
+                <option>Class 1</option><option>Class 2</option><option>Class 3</option>
+                <option>Class 4</option><option>Class 5</option><option>Class 6</option>
+                <option>Class 7</option><option>Class 8</option><option>Class 9</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group"><label>Parent / Guardian Name</label><input type="text" name="parent_name" id="f-parent" placeholder="Parent name"></div>
+          <div class="form-group"><label>Email Address</label><input type="email" name="email" id="f-email" placeholder="your@email.com"></div>
+          <div class="form-group"><label>Phone Number</label><input type="tel" name="phone" id="f-phone" placeholder="+91 XXXXX XXXXX"></div>
+          <div class="form-group">
+            <label>Interested In</label>
+            <select name="programme" id="f-prog">
+              <option value="">Select Programme</option>
+              <option>Regular Classes</option>
+              <option>Summer Foundation Classes (Class 1–6)</option>
+              <option>Summer Advanced Classes (Class 7–9)</option>
+              <option>Both Regular + Summer</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Message / Subjects of Interest</label><textarea name="message" id="f-msg" placeholder="Tell us which subjects you're looking for help with..."></textarea></div>
+          <button type="submit" class="submit-btn" id="submit-btn">
+            <span id="btn-text">✉️ Send Enquiry</span>
+            <span id="btn-loader" style="display:none;">⏳ Sending...</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="https://i.postimg.cc/x9mDND2Q/Ttc-logo.png" alt="TTC" onerror="this.style.display='none'">
+        <h3>Tushar Tuition Classes</h3>
+        <p>Empowering students in Wardha with quality education, expert teachers, and a nurturing environment since day one.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <a href="#subjects">Subjects</a>
+        <a href="#teachers">Our Teachers</a>
+        <a href="#summer">☀️ Summer Classes</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Enroll Now</a>
+      </div>
+      <div class="footer-col">
+        <h4>Info</h4>
+        <a href="#">📍 Wardha, Maharashtra</a>
+        <a href="#">⏰ 4 PM – 8 PM</a>
+        <a href="#">📚 Class 1 to 9</a>
+        <a href="#">☀️ Summer Classes: 15th April</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 TTC Wardha – Tushar Tuition Classes. All rights reserved.</span>
+      <span>Made with <span class="footer-heart">♥</span> for learning</span>
+    </div>
+  </div>
+</footer>
+ 
+<!-- FAB BUTTONS -->
+<div class="fab-wrap">
+  <a class="fab fab-wa" href="https://wa.me/917517445450" target="_blank" rel="noopener" title="Chat on WhatsApp">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="28" height="28">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+    <span class="fab-label">WhatsApp Us</span>
+  </a>
+  <a class="fab fab-map" href="https://maps.app.goo.gl/fL8MtRx7jBA9QqHu9" target="_blank" rel="noopener" title="Find us on Maps">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28">
+      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#EA4335"/>
+    </svg>
+    <span class="fab-label">Get Directions</span>
+  </a>
 </div>
+ 
+<style>
+.fab-wrap { position: fixed; bottom: 24px; right: 24px; display: flex; flex-direction: column; gap: 14px; z-index: 999; }
+.fab { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 24px rgba(0,0,0,0.2); text-decoration: none; transition: all .25s; position: relative; cursor: pointer; }
+.fab svg { width: 30px; height: 30px; }
+.fab:hover { transform: scale(1.12); box-shadow: 0 10px 32px rgba(0,0,0,0.28); }
+.fab-wa { background: #25D366; }
+.fab-map { background: #fff; }
+.fab-label { position: absolute; right: 66px; background: #1a1a2e; color: #fff; font-family: 'Nunito', sans-serif; font-size: 0.78rem; font-weight: 700; padding: 5px 12px; border-radius: 20px; white-space: nowrap; opacity: 0; pointer-events: none; transform: translateX(8px); transition: opacity .2s, transform .2s; }
+.fab:hover .fab-label { opacity: 1; transform: translateX(0); }
+.fab-wa::before { content: ''; position: absolute; width: 56px; height: 56px; border-radius: 50%; background: rgba(37,211,102,0.4); animation: wa-pulse 2s ease-out infinite; }
+@keyframes wa-pulse { 0%{transform:scale(1);opacity:.7} 100%{transform:scale(1.7);opacity:0} }
+</style>
  
 <script>
-/* ════════════════════════
-   AD ENGINE
-════════════════════════ */
-let audioCtx = null;
-function ac() {
-  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-  return audioCtx;
-}
-function tone(freq, type, dur, vol=0.25, delay=0) {
-  const ctx=ac(), o=ctx.createOscillator(), g=ctx.createGain();
-  o.connect(g); g.connect(ctx.destination);
-  o.type=type; o.frequency.setValueAtTime(freq, ctx.currentTime+delay);
-  g.gain.setValueAtTime(vol, ctx.currentTime+delay);
-  g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+delay+dur);
-  o.start(ctx.currentTime+delay); o.stop(ctx.currentTime+delay+dur);
-}
-function noise(dur, vol=0.1, delay=0) {
-  const ctx=ac(), buf=ctx.createBuffer(1,ctx.sampleRate*dur,ctx.sampleRate);
-  const d=buf.getChannelData(0);
-  for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
-  const src=ctx.createBufferSource(), g=ctx.createGain();
-  src.buffer=buf; src.connect(g); g.connect(ctx.destination);
-  g.gain.setValueAtTime(vol, ctx.currentTime+delay);
-  g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+delay+dur);
-  src.start(ctx.currentTime+delay);
-}
-function sndHey()    { tone(880,'sine',0.15,0.3); tone(1100,'sine',0.12,0.2,0.15); noise(0.08,0.06); }
-function sndBeep(n)  { const f=[0,1200,900,660][n]||880; tone(f,'square',0.1,0.3); noise(0.04,0.04); }
-function sndBlast()  { tone(100,'sawtooth',0.35,0.35); tone(200,'sawtooth',0.25,0.25,0.03); noise(0.2,0.18); }
-function sndWhoosh() { const ctx=ac(),o=ctx.createOscillator(),g=ctx.createGain(); o.connect(g);g.connect(ctx.destination); o.type='sawtooth'; o.frequency.setValueAtTime(1000,ctx.currentTime); o.frequency.exponentialRampToValueAtTime(100,ctx.currentTime+0.3); g.gain.setValueAtTime(0.2,ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.3); o.start(); o.stop(ctx.currentTime+0.3); }
-function sndTick()   { tone(1400,'square',0.04,0.2); }
-function sndVictory(){ [523,659,784,1047,1319].forEach((f,i)=>tone(f,'sine',0.2,0.22,i*0.09)); noise(0.12,0.04,0.3); }
-function sndPop()    { tone(600,'sine',0.08,0.25); tone(900,'sine',0.06,0.2,0.06); }
+// ── NAVBAR ──
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 20);
+});
  
-// Particles
-const cvs=document.getElementById('particles'), cx=cvs.getContext('2d');
-cvs.width=360; cvs.height=640;
-let pts=[];
-const FUN_COLORS=['#E8522A','#FFD93D','#4CC9F0','#06D6A0','#FF6B9D','#A78BFA','#fff'];
-function burst(x,y,n=70,colors=FUN_COLORS){
-  for(let i=0;i<n;i++){
-    const a=Math.random()*Math.PI*2, sp=3+Math.random()*9;
-    pts.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-4,life:1,decay:0.018+Math.random()*0.025,size:4+Math.random()*7,color:colors[Math.floor(Math.random()*colors.length)],shape:Math.random()>.4?'rect':'circle',rot:Math.random()*Math.PI*2,rotV:(Math.random()-.5)*0.3});
-  }
+// ── SUMMER TAB SWITCHER ──
+function switchTab(tab) {
+  document.querySelectorAll('.summer-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.summer-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`.summer-tab.${tab}`).classList.add('active');
+  document.getElementById(`panel-${tab}`).classList.add('active');
 }
-function confettiRain(n=80,delay=0){
-  setTimeout(()=>{
-    for(let i=0;i<n;i++){
-      pts.push({x:Math.random()*370,y:-10-Math.random()*60,vx:(Math.random()-.5)*2.5,vy:3+Math.random()*5,life:1,decay:0.006+Math.random()*0.008,size:6+Math.random()*8,color:FUN_COLORS[Math.floor(Math.random()*FUN_COLORS.length)],shape:Math.random()>.4?'rect':'circle',rot:Math.random()*Math.PI*2,rotV:(Math.random()-.5)*0.15,wobble:Math.random()*Math.PI*2,wobbleSpeed:0.05+Math.random()*0.05});
+ 
+// ── FAQ ACCORDION ──
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
+});
+ 
+// ── SCROLL REVEALS ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+ 
+// ── SUBJECT PILLS STAGGER ──
+const pills = document.querySelectorAll('.subject-pill');
+const pillObserver = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting) {
+    pills.forEach((pill, i) => setTimeout(() => pill.classList.add('visible'), i * 60));
+    pillObserver.disconnect();
+  }
+}, { threshold: 0.1 });
+if (pills.length) pillObserver.observe(pills[0].closest('.subjects-grid'));
+ 
+// ── TEACHER CARDS STAGGER ──
+const tcards = document.querySelectorAll('.teacher-card');
+const cardObserver = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting) {
+    tcards.forEach((card, i) => setTimeout(() => card.classList.add('visible'), i * 150));
+    cardObserver.disconnect();
+  }
+}, { threshold: 0.1 });
+if (tcards.length) cardObserver.observe(tcards[0].closest('.teachers-grid'));
+ 
+// ── DEVICE TILT ──
+const device = document.querySelector('.device');
+if (device) {
+  window.addEventListener('scroll', () => {
+    const progress = Math.max(0, Math.min(1, 1 - device.getBoundingClientRect().top / window.innerHeight));
+    device.style.transform = `perspective(1200px) rotateX(${8 - progress * 8}deg)`;
+  });
+}
+ 
+// ── ELFSIGHT PLACEHOLDER HIDE ──
+setTimeout(() => {
+  const widget = document.querySelector('.elfsight-app-e87fdd6e-f4b8-4807-89b4-ecc80ca4f3c0');
+  const placeholder = document.getElementById('review-placeholder');
+  if (widget && placeholder && widget.innerHTML.trim().length > 80) {
+    placeholder.style.transition = 'opacity 0.5s';
+    placeholder.style.opacity = '0';
+    setTimeout(() => placeholder.style.display = 'none', 500);
+  }
+}, 5000);
+ 
+// ── FORMSPREE AJAX ──
+function resetForm() {
+  document.getElementById('form-success').style.display = 'none';
+  document.getElementById('contact-form').style.display = 'block';
+  document.getElementById('contact-form').reset();
+}
+ 
+const form = document.getElementById('contact-form');
+if (form) {
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btnText = document.getElementById('btn-text');
+    const btnLoader = document.getElementById('btn-loader');
+    const submitBtn = document.getElementById('submit-btn');
+    const successDiv = document.getElementById('form-success');
+    const errorDiv = document.getElementById('form-error');
+ 
+    btnText.style.display = 'none';
+    btnLoader.style.display = 'inline';
+    submitBtn.disabled = true;
+    errorDiv.style.display = 'none';
+ 
+    const payload = {
+      student_name: document.getElementById('f-name').value,
+      parent_name: document.getElementById('f-parent').value,
+      email: document.getElementById('f-email').value,
+      phone: document.getElementById('f-phone').value,
+      class: document.getElementById('f-class').value,
+      programme: document.getElementById('f-prog').value,
+      message: document.getElementById('f-msg').value,
+    };
+ 
+    try {
+      const res = await fetch('https://formspree.io/f/mwvrlqqd', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const json = await res.json();
+      if (res.ok) {
+        form.style.display = 'none';
+        successDiv.style.display = 'block';
+      } else {
+        throw new Error(json.error || 'Submission failed');
+      }
+    } catch (err) {
+      errorDiv.style.display = 'block';
+      errorDiv.textContent = '⚠️ ' + (err.message || 'Something went wrong. Please try again.');
+    } finally {
+      btnText.style.display = 'inline';
+      btnLoader.style.display = 'none';
+      submitBtn.disabled = false;
     }
-  }, delay);
-}
-function sparks(x,y){ for(let i=0;i<15;i++){ const a=Math.random()*Math.PI*2,sp=2+Math.random()*5; pts.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1,decay:0.06,size:2+Math.random()*3,color:'#FFD93D',shape:'circle',rot:0,rotV:0}); } }
-function tickPts(){
-  cx.clearRect(0,0,360,640);
-  pts=pts.filter(p=>p.life>0);
-  pts.forEach(p=>{
-    if(p.wobble!==undefined){ p.wobble+=p.wobbleSpeed; p.vx+=Math.sin(p.wobble)*0.08; }
-    p.x+=p.vx; p.y+=p.vy; p.vy+=0.2; p.vx*=0.97; p.life-=p.decay; p.rot+=p.rotV;
-    cx.save(); cx.globalAlpha=Math.max(0,p.life); cx.fillStyle=p.color;
-    if(p.shape==='rect'){ cx.translate(p.x,p.y); cx.rotate(p.rot); cx.fillRect(-p.size/2,-p.size/2,p.size,p.size); }
-    else { cx.beginPath(); cx.arc(p.x,p.y,p.size/2,0,Math.PI*2); cx.fill(); }
-    cx.restore();
   });
-  requestAnimationFrame(tickPts);
 }
-tickPts();
- 
-const TOTAL_SCENES=6, DURATIONS=[1500,1300,1800,2600,2200,4000];
-const TOTAL_DUR=DURATIONS.reduce((a,b)=>a+b,0);
-let cur=0, mainT=null, cdInt=null, progRaf=null, progT0=null, going=false;
-const stageEl=document.getElementById('stage'), pFill=document.getElementById('progFill'), replayB=document.getElementById('replayBtn');
- 
-function shake(){ stageEl.style.animation='screenShake 0.25s ease'; setTimeout(()=>stageEl.style.animation='',280); }
-function setDot(n){ for(let i=0;i<TOTAL_SCENES-1;i++){ const d=document.getElementById('d'+i); if(d) d.classList.toggle('on',i===n); } }
- 
-function goScene(n){
-  document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));
-  const s=document.getElementById('s'+n);
-  if(s){ void s.offsetWidth; s.classList.add('active'); }
-  setDot(n);
-  if(n===0){ sndHey(); }
-  if(n===1){ sndBeep(3); runCountdown(); }
-  if(n===2){ sndBlast(); shake(); burst(180,320,90); setTimeout(()=>sndPop(),350); }
-  if(n===3){ sndWhoosh(); [150,300,450,600].forEach(d=>setTimeout(sndTick,d)); }
-  if(n===4){ shake(); sndPop(); setTimeout(sndPop,120); burst(180,220,60,['#fff','#FFD93D','rgba(255,255,255,.6)']); }
-  if(n===5){ sndVictory(); confettiRain(55); burst(60,200,50); burst(300,150,50); }
-}
- 
-let cdN=3;
-function runCountdown(){
-  clearInterval(cdInt); cdN=3;
-  const el=document.getElementById('cdNum');
-  el.textContent=3; sparks(180,300);
-  cdInt=setInterval(()=>{
-    cdN--;
-    if(cdN<=0){ clearInterval(cdInt); el.textContent=1; sndBeep(1); return; }
-    el.textContent=cdN; sndBeep(cdN); sparks(180,300);
-    el.style.animation=''; void el.offsetWidth;
-  },400);
-}
- 
-function schedNext(){
-  if(!going) return;
-  mainT=setTimeout(()=>{
-    cur++;
-    if(cur<TOTAL_SCENES){ goScene(cur); schedNext(); }
-    else { going=false; replayB.classList.add('show'); }
-  }, DURATIONS[cur]);
-}
- 
-function animProg(){
-  progT0=performance.now();
-  function step(now){ const pct=Math.min(((now-progT0)/TOTAL_DUR)*100,100); pFill.style.width=pct+'%'; if(pct<100&&going) progRaf=requestAnimationFrame(step); }
-  progRaf=requestAnimationFrame(step);
-}
- 
-function startAd(){
-  cur=0; going=true;
-  clearTimeout(mainT); clearInterval(cdInt); cancelAnimationFrame(progRaf);
-  pFill.style.width='0%'; replayB.classList.remove('show');
-  goScene(0); schedNext(); animProg();
-}
- 
-// Launch quiz — fade out ad, show quiz
-function launchQuiz(){
-  const overlay=document.getElementById('adOverlay');
-  overlay.style.opacity='0';
-  setTimeout(()=>{
-    overlay.style.display='none';
-    const quizApp=document.getElementById('quizApp');
-    quizApp.style.display='block';
-    void quizApp.offsetWidth;
-    const saved=localStorage.getItem('ttc_name');
-    if(saved) document.getElementById('username').value=saved;
-  }, 600);
-}
- 
-// Start button
-document.getElementById('startBtn').addEventListener('click',()=>{
-  const ss=document.getElementById('startScreen'), dots=document.getElementById('sceneDots');
-  ss.classList.add('hide');
-  setTimeout(()=>{ ss.style.display='none'; dots.style.opacity='1'; }, 400);
-  startAd();
-});
- 
-/* ════════════════════════
-   QUIZ ENGINE
-════════════════════════ */
-const subjectName="Maths", chapterName="Algebra, Trigonometry & Quadrants";
-const quizData=[
-  {question:"What is the full form of TTC?",options:["The Test Center","Total Time Control","Tushar Tuition Classes","Technical Training Course"],correct:"Tushar Tuition Classes",explanation:"TTC stands for Tushar Tuition Classes."},
-  {question:"What is the formula for the volume of a cuboid?",options:["2(l + b) x h","2(lb + bh + lh)","l x b x h","6l²"],correct:"l x b x h",explanation:"The volume of a cuboid is calculated by multiplying its length (l), breadth (b), and height (h) together."},
-  {question:"What is the formula for the area of the vertical surfaces of a cuboid?",options:["2(lb + bh + lh)","2(l + b) x h","l x b x h","6l²"],correct:"2(l + b) x h",explanation:"The area of the vertical surfaces of a cuboid only takes 4 surfaces into consideration, resulting in the formula 2(l + b) x h."},
-  {question:"What is the total surface area of a cuboid?",options:["2(l + b) x h","2(lb + bh + lh)","l x b x h","4l²"],correct:"2(lb + bh + lh)",explanation:"The total surface area of a cuboid takes all 6 surfaces into consideration."},
-  {question:"What is the total surface area of a cube with edge length l?",options:["4l²","l³","6l²","2l²"],correct:"6l²",explanation:"A cube has 6 equal square faces, so taking all 6 surfaces into consideration, the total surface area is 6l²."},
-  {question:"What is the formula for the area of the vertical surfaces of a cube?",options:["6l²","4l²","l³","2l²"],correct:"4l²",explanation:"The vertical surfaces of a cube consist of 4 square faces, making the area 4l²."},
-  {question:"What is the formula for the volume of a cube?",options:["l²","4l²","6l²","l³"],correct:"l³",explanation:"If l is the edge of a cube, its volume is calculated by multiplying length, width, and height, which simplifies to l³."},
-  {question:"What is the formula for the curved surface area of a cylinder?",options:["2πrh","πr²h","2πr(r + h)","πrl"],correct:"2πrh",explanation:"The curved surface area of a cylinder with radius r and height h is 2πrh."},
-  {question:"What is the formula for the total surface area of a cylinder?",options:["2πrh","πr²h","2πr(r + h)","πrl"],correct:"2πr(r + h)",explanation:"The total surface area of a cylinder combines its curved surface area and the areas of its two circular bases, factoring out to 2πr(r + h)."},
-  {question:"What is the formula for the volume of a cylinder?",options:["2πrh","πr²h","2πr(r + h)","πr²l"],correct:"πr²h",explanation:"The volume of a cylinder is found by multiplying the area of its circular base (πr²) by its height (h)."},
-  {question:"Which two numerical values are standardly used for π?",options:["22/7 and 3.14","22/7 and 3.41","7/22 and 3.14","21/7 and 3.14"],correct:"22/7 and 3.14",explanation:"The value of π is conventionally taken as either 22/7 or 3.14."},
-  {question:"What is the formula for the curved surface area of a cone?",options:["πr²h","πr(l + r)","πrl","2πrh"],correct:"πrl",explanation:"The curved surface area of a cone is equal to π multiplied by the radius (r) and the slant height (l)."},
-  {question:"What is the formula for the total surface area of a cone?",options:["πrl","πr(l + r)","(1/3)πr²h","2πr(r + h)"],correct:"πr(l + r)",explanation:"The total surface area of a cone is the sum of its curved surface area and the area of its base, which can be written as πr(l + r)."},
-  {question:"What is the formula for the volume of a cone?",options:["πr²h","(1/3)πr²h","(4/3)πr³","πr(l + r)"],correct:"(1/3)πr²h",explanation:"If the base radii and heights of a cone and a cylinder are equal, the volume of the cone is one-third the volume of the cylinder."},
-  {question:"What is the surface area of a sphere?",options:["4πr²","(2/3)πr³","3πr²","(4/3)πr³"],correct:"4πr²",explanation:"The formula for the surface area of a sphere is 4πr²."},
-  {question:"What is the surface area of a hollow hemisphere?",options:["4πr²","3πr²","2πr²","πr²"],correct:"2πr²",explanation:"A hollow hemisphere consists only of its curved surface, which is exactly half of a full sphere, making its area 2πr²."},
-  {question:"What is the total surface area of a solid hemisphere?",options:["2πr²","3πr²","4πr²","(2/3)πr³"],correct:"3πr²",explanation:"A solid hemisphere includes the curved surface area plus the area of the flat circular base, resulting in a total surface area of 3πr²."},
-  {question:"What is the volume of a sphere?",options:["4πr²","(2/3)πr³","3πr²","(4/3)πr³"],correct:"(4/3)πr³",explanation:"The formula for the volume of a sphere is (4/3)πr³."},
-  {question:"What is the formula for the volume of a hemisphere?",options:["(4/3)πr³","3πr²","(2/3)πr³","(1/3)πr²h"],correct:"(2/3)πr³",explanation:"Because a hemisphere is exactly half of a full sphere, its volume formula is (2/3)πr³."},
-  {question:"In trigonometry, what is the formula for the sin ratio?",options:["adjacent side / hypotenuse","opposite side / adjacent side","opposite side / hypotenuse","adjacent side / opposite side"],correct:"opposite side / hypotenuse",explanation:"The sin ratio of an angle is calculated by dividing the length of the opposite side by the hypotenuse."},
-  {question:"In a right-angled triangle, what is the formula for the cos ratio?",options:["opposite side / hypotenuse","adjacent side / hypotenuse","opposite side / adjacent side","adjacent side / opposite side"],correct:"adjacent side / hypotenuse",explanation:"The cos ratio of an angle is found by dividing the length of the adjacent side by the hypotenuse."},
-  {question:"What is the formula for the tan ratio in trigonometry?",options:["opposite side / adjacent side","opposite side / hypotenuse","adjacent side / hypotenuse","hypotenuse / opposite side"],correct:"opposite side / adjacent side",explanation:"The tan ratio is defined as the length of the opposite side divided by the length of the adjacent side."},
-  {question:"Which of the following correctly expresses tan θ?",options:["cos θ / sin θ","sin θ × cos θ","sin θ / cos θ","1 / sin θ"],correct:"sin θ / cos θ",explanation:"The tangent ratio of an angle (tan θ) is mathematically equal to sin θ divided by cos θ."},
-  {question:"Based on complementary angles, what does cos(90° − θ) equal?",options:["sin θ","tan θ","1","0"],correct:"sin θ",explanation:"Based on the relations between trigonometric ratios of complementary angles, cos(90° − θ) is equal to sin θ."},
-  {question:"What is the exact value of sin 90°?",options:["0","1/2","1","√3/2"],correct:"1",explanation:"According to the standard trigonometric table, the value of sin 90° is 1."},
-  {question:"What is the value of cos 0°?",options:["0","1/2","1/√2","1"],correct:"1",explanation:"By using the relations between trigonometric ratios of complementary angles, it is proven that cos 0° is equal to 1."},
-  {question:"What is the value of tan 45°?",options:["0","1","1/√3","√3"],correct:"1",explanation:"In a right-angled triangle where one angle is 45°, the opposite and adjacent sides are equal, making the tan 45° ratio exactly 1."},
-  {question:"What is the equation of the X-axis?",options:["x = 0","y = 0","x + y = 0","x = y"],correct:"y = 0",explanation:"The equation of the X-axis is y = 0 because every point located directly on the X-axis has a y-coordinate of zero."},
-  {question:"In which quadrant does the point (−2, 4) lie?",options:["Quadrant I","Quadrant II","Quadrant III","Quadrant IV"],correct:"Quadrant II",explanation:"A point with a negative x-coordinate and a positive y-coordinate, such as (−2, 4), lies in Quadrant II."},
-  {question:"In which quadrant does the point (2, −5) lie?",options:["Quadrant I","Quadrant II","Quadrant III","Quadrant IV"],correct:"Quadrant IV",explanation:"A point that has a positive x-coordinate but a negative y-coordinate, like (2, −5), lies in Quadrant IV."}
-];
- 
-let username='', questions=[], qIndex=0, score=0;
-const letters=["A","B","C","D"];
- 
-const savedName=localStorage.getItem("ttc_name")||"";
-if(savedName) document.getElementById("username").value=savedName;
- 
-document.getElementById("username").addEventListener("keydown",e=>{ if(e.key==="Enter") startWelcome(); });
- 
-function shuffle(arr){ return [...arr].sort(()=>Math.random()-0.5); }
-function showScreen(id){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-  const el=document.getElementById(id);
-  el.classList.remove("active"); void el.offsetWidth; el.classList.add("active");
-}
-function startWelcome(){
-  username=document.getElementById("username").value.trim();
-  if(!username){
-    const inp=document.getElementById("username");
-    inp.style.borderColor="var(--pink)"; inp.style.boxShadow="3px 3px 0 var(--pink)";
-    inp.placeholder="Please enter your name! 👆"; inp.focus(); return;
-  }
-  localStorage.setItem("ttc_name",username);
-  document.getElementById("welcomeText").innerText="Let's go, "+username+"!";
-  showScreen("welcomeScreen");
-}
-function startQuiz(){
-  questions=shuffle(quizData); qIndex=0; score=0;
-  showScreen("quizScreen"); loadQuestion();
-}
-function loadQuestion(){
-  const q=questions[qIndex], opts=shuffle([...q.options]);
-  document.getElementById("qCounter").innerText=`Q ${qIndex+1} / ${questions.length}`;
-  document.getElementById("qScore").innerText=`Score: ${score}`;
-  document.getElementById("progressBar").style.width=((qIndex/questions.length)*100)+"%";
-  document.getElementById("question").innerText=q.question;
-  const container=document.getElementById("options");
-  container.innerHTML="";
-  opts.forEach((opt,i)=>{
-    const div=document.createElement("div");
-    div.className="option";
-    div.innerHTML=`<span class="option-letter">${letters[i]}</span><span class="opt-text">${opt}</span>`;
-    div.onclick=()=>selectOption(div,opt,q);
-    container.appendChild(div);
-  });
-  document.getElementById("explBox").classList.remove("show");
-  document.getElementById("explText").innerText="";
-  document.getElementById("nextBtn").classList.add("hidden");
-}
-function selectOption(el,opt,q){
-  document.querySelectorAll(".option").forEach(o=>o.onclick=null);
-  if(opt===q.correct){
-    el.classList.add("correct"); score++;
-    confetti({particleCount:100,spread:70,origin:{y:0.55},colors:["#4361EE","#C8FF00","#FF3D8A","#FF6B35","#ffffff"]});
-  } else {
-    el.classList.add("wrong");
-    document.querySelectorAll(".option").forEach(o=>{ if(o.querySelector(".opt-text")?.innerText.trim()===q.correct) o.classList.add("correct"); });
-  }
-  document.getElementById("explText").innerText=q.explanation;
-  document.getElementById("explBox").classList.add("show");
-  document.getElementById("qScore").innerText=`Score: ${score}`;
-  document.getElementById("nextBtn").classList.remove("hidden");
-}
-function nextQuestion(){ qIndex++; if(qIndex>=questions.length){ showResult(); return; } loadQuestion(); }
-function showResult(){
-  showScreen("resultScreen");
-  const total=questions.length, pct=Math.round((score/total)*100);
-  document.getElementById("scoreNum").innerText=score;
-  document.getElementById("scoreDenom").innerText=`/${total}`;
-  document.getElementById("scorePct").innerText=pct+"%";
-  let emoji,title,msg,chipText,pctBg;
-  if(pct>=90){ emoji="🔥";title="Absolutely Smashed It!";pctBg="#EAFFDA";msg="Perfect! Outstanding performance, "+username+". Top of the class!";chipText="✦ Outstanding"; }
-  else if(pct>=75){ emoji="💪";title="Really Well Done!";pctBg="#E0F0FF";msg="Strong performance, "+username+"! A little more practice and you'll be perfect.";chipText="✦ Well Done"; }
-  else if(pct>=50){ emoji="📚";title="Good Effort!";pctBg="#FFF8DC";msg="You're on the right track, "+username+". Keep revising and you'll ace it!";chipText="✦ Keep Going"; }
-  else { emoji="🧐";title="Time to Revise!";pctBg="#FFEAEA";msg="Don't worry, "+username+" — go through the chapters once more and try again!";chipText="✦ Try Again"; }
-  document.getElementById("fbEmoji").innerText=emoji;
-  document.getElementById("fbTitle").innerText=title;
-  document.getElementById("fbMsg").innerText=msg;
-  document.getElementById("resultChip").innerText=chipText;
-  document.getElementById("scorePct").style.background=pctBg;
-  confetti({particleCount:180,spread:110,origin:{y:0.45},colors:["#4361EE","#C8FF00","#FF3D8A","#FF6B35","#ffffff"]});
-}
-function shareWhatsApp(){
-  const msg=`🎓 *TTC Quiz Result*\n\n👤 *Student:* ${username}\n📘 *Subject:* ${subjectName}\n📖 *Chapter:* ${chapterName}\n🏆 *Score:* ${score}/${questions.length}\n\n_Tushar Tuition Classes, Wardha_ 📚`;
-  window.open("https://wa.me/?text="+encodeURIComponent(msg));
-}
-function restartQuiz(){ location.reload(); }
- 
-document.getElementById("ratingBtn").addEventListener("click",function(){
-  for(let i=0;i<16;i++){
-    const s=document.createElement("span");
-    s.className="sburst";
-    s.innerText=["★","✦","●","▲"][Math.floor(Math.random()*4)];
-    s.style.color=["#C8FF00","#FF6B35","#4361EE","#FF3D8A"][Math.floor(Math.random()*4)];
-    s.style.setProperty("--bx",(Math.random()*160-80)+"px");
-    s.style.setProperty("--by",(Math.random()*-150)+"px");
-    s.style.left=(35+Math.random()*30)+"%"; s.style.top="50%";
-    this.appendChild(s); setTimeout(()=>s.remove(),750);
-  }
-  setTimeout(()=>window.open("https://g.page/r/CdUkswJ0ZulAEBE/review"),320);
-});
 </script>
 </body>
 </html>
