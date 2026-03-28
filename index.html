@@ -378,6 +378,32 @@
     font-size: 0.73rem; font-weight: 700; padding: 3px 10px; border-radius: 20px;
     background: #f8f8f8; color: var(--muted); border: 1px solid #eee;
   }
+
+  /* Combo Discount Banner */
+  .combo-discount-banner {
+    margin-top: 28px;
+    background: linear-gradient(135deg, #fff9f2, #fff0f0);
+    border: 2px dashed #FF8C42;
+    border-radius: 16px;
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(255,140,66,0.12);
+    text-align: left;
+    position: relative;
+    z-index: 2;
+  }
+  .advanced-panel .combo-discount-banner {
+    background: linear-gradient(135deg, #f0f7ff, #f3f0ff);
+    border-color: #4da6ff;
+    box-shadow: 0 8px 24px rgba(77,166,255,0.12);
+  }
+  .cdb-icon { font-size: 2.2rem; animation: bounce-icon 2s infinite; }
+  .cdb-text strong { display: block; font-size: 1.15rem; color: var(--text); font-weight: 900; margin-bottom: 4px; }
+  .cdb-text span { font-size: 0.95rem; color: #e67300; font-weight: 700; }
+  .advanced-panel .cdb-text span { color: #0066cc; }
  
   /* Summer CTA */
   .summer-cta-wrap {
@@ -608,7 +634,9 @@
     .panel-header { flex-wrap: wrap; }
     .ph-badge { margin-left: 0; }
     .admission-banner { flex-wrap: wrap; text-align: center; justify-content: center; }
-    .summer-tabs { flex-direction: column; align-items: center; }
+    /* Mobile tabs layout fix */
+    .summer-tabs { flex-direction: row; gap: 8px; justify-content: stretch; }
+    .summer-tab { padding: 10px; font-size: 0.8rem; flex: 1; text-align: center; }
   }
 </style>
 </head>
@@ -619,7 +647,7 @@
   <div class="ribbon-inner">
     <span class="ribbon-pulse"></span>
     <span class="ribbon-badge">🌞 New</span>
-    <span>TTC Summer Classes 2026 — Admissions Opening <strong>15th April 2026!</strong> Foundation &amp; Advanced Batches Available</span>
+    <span>TTC Summer Classes 2026 — Classes starting from <strong>15th April, 2026!</strong> Foundation &amp; Advanced Batches Available</span>
     <span style="opacity:0.7;font-size:0.75rem;">Click to know more ↓</span>
   </div>
 </div>
@@ -691,7 +719,7 @@
         <div class="hero-card hc-summer">
           <div class="hc-icon">☀️</div>
           <div class="hc-label">Summer Classes</div>
-          <div class="hc-sub">Opens 15th April!</div>
+          <div class="hc-sub">Starts 15th April!</div>
         </div>
       </div>
     </div>
@@ -711,12 +739,12 @@
     <!-- Header -->
     <div class="summer-header reveal">
       <div class="summer-tag">☀️ Limited Seats • Summer 2026</div>
-      <h2 class="summer-title">TTC <span class="highlight">Summer Classes</span><br>Are Coming!</h2>
+      <h2 class="summer-title">TTC <span class="highlight">Summer Classes</span><br>Are Here!</h2>
       <p class="summer-subtitle">Two specially designed programmes — Foundation for Class 1–6 and Advanced Gap-Filling for Class 7–9. Give your child the head-start they deserve this summer.</p>
       <div class="admission-banner">
         <span class="ab-icon">🗓️</span>
         <div class="ab-text">
-          <strong>Admissions Opening</strong>
+          <strong>Classes Starting</strong>
           <span>Register your interest now!</span>
         </div>
         <div class="ab-date">📅 15th April, 2026</div>
@@ -749,7 +777,6 @@
           <div class="cc-name">Hindi Reading Practice</div>
           <div class="cc-topics">
             <span class="topic-chip">Fluency</span>
-            <span class="topic-chip">Expression</span>
             <span class="topic-chip">Comprehension</span>
             <span class="topic-chip">Vocabulary</span>
           </div>
@@ -763,9 +790,9 @@
           <div class="cc-name">English Reading Practice + Phonics</div>
           <div class="cc-topics">
             <span class="topic-chip">Phonics</span>
-            <span class="topic-chip">Sight Words</span>
             <span class="topic-chip">Reading Aloud</span>
             <span class="topic-chip">Comprehension</span>
+            <span class="topic-chip">Word by word reading practice</span>
           </div>
         </div>
  
@@ -776,10 +803,10 @@
           </div>
           <div class="cc-name">Hindi Handwriting Practice</div>
           <div class="cc-topics">
-            <span class="topic-chip">Letter Formation</span>
             <span class="topic-chip">Spacing</span>
             <span class="topic-chip">Matras</span>
             <span class="topic-chip">Consistency</span>
+            <span class="topic-chip">Legibility</span>
           </div>
         </div>
  
@@ -791,9 +818,9 @@
           <div class="cc-name">English Handwriting Practice</div>
           <div class="cc-topics">
             <span class="topic-chip">Grip Correction</span>
-            <span class="topic-chip">Letter Forms</span>
             <span class="topic-chip">Baseline</span>
             <span class="topic-chip">Neatness</span>
+            <span class="topic-chip">Legibility</span>
           </div>
         </div>
  
@@ -818,11 +845,17 @@
           </div>
           <div class="cc-name">Basic Maths</div>
           <div class="cc-topics">
+            <span class="topic-chip">Addition</span>
+            <span class="topic-chip">Subtraction</span>
+            <span class="topic-chip">Multiplication</span>
+            <span class="topic-chip">Division</span>
             <span class="topic-chip">Tables 2–20</span>
             <span class="topic-chip">Fractions</span>
+            <span class="topic-chip">Decimals</span>
             <span class="topic-chip">BODMAS</span>
             <span class="topic-chip">Word Problems</span>
-            <span class="topic-chip">Place Value</span>
+            <span class="topic-chip">Simplification of fractions</span>
+            <span class="topic-chip">Measurement and conversions</span>
           </div>
         </div>
  
@@ -833,14 +866,25 @@
           </div>
           <div class="cc-name">Basic Grammar</div>
           <div class="cc-topics">
-            <span class="topic-chip">Parts of Speech</span>
             <span class="topic-chip">Articles</span>
             <span class="topic-chip">Tenses</span>
+            <span class="topic-chip">Verbs</span>
             <span class="topic-chip">Punctuation</span>
-            <span class="topic-chip">Sentences</span>
+            <span class="topic-chip">Use of has, have, had</span>
+            <span class="topic-chip">Use of do, does, did</span>
+            <span class="topic-chip">Conjunctions</span>
+            <span class="topic-chip">Types of sentences</span>
           </div>
         </div>
  
+      </div>
+      <!-- Foundation Combo Discount Banner -->
+      <div class="combo-discount-banner reveal">
+        <div class="cdb-icon">🎉</div>
+        <div class="cdb-text">
+          <strong>Combo Discounts Available!</strong>
+          <span>Enroll in multiple subjects and get special fee benefits.</span>
+        </div>
       </div>
     </div>
  
@@ -862,11 +906,11 @@
             <div class="cc-fee-tag">₹ 700</div>
           </div>
           <div class="cc-name">Answer Framing & Exam Writing Skills</div>
+          <p style="font-size: 0.85rem; color: var(--muted); margin: 0; line-height: 1.5; font-weight: 600;">Best suited for students who understand the concept but struggle to write properly in exams.</p>
           <div class="cc-topics">
             <span class="topic-chip">Decode Questions</span>
-            <span class="topic-chip">1/3/5 Mark Answers</span>
+            <span class="topic-chip">1/3/5/8 Marks answers</span>
             <span class="topic-chip">Grammar in Writing</span>
-            <span class="topic-chip">Time Management</span>
             <span class="topic-chip">Board-style Practice</span>
           </div>
         </div>
@@ -885,6 +929,11 @@
             <span class="topic-chip">Percentage</span>
             <span class="topic-chip">Ratio & Fractions</span>
             <span class="topic-chip">Statistics</span>
+            <span class="topic-chip">Data handling</span>
+            <span class="topic-chip">Bar graph</span>
+            <span class="topic-chip">Histogram</span>
+            <span class="topic-chip">Polynomials</span>
+            <span class="topic-chip">Algebraic identities</span>
           </div>
         </div>
  
@@ -900,7 +949,11 @@
             <span class="topic-chip">Elements & Compounds</span>
             <span class="topic-chip">Atoms & Molecules</span>
             <span class="topic-chip">Chemical Formulae</span>
-            <span class="topic-chip">Equation Balancing</span>
+            <span class="topic-chip">Periodic table</span>
+            <span class="topic-chip">Electronic configuration</span>
+            <span class="topic-chip">Calculation of atomic mass</span>
+            <span class="topic-chip">Calculation of atomicity</span>
+            <span class="topic-chip">Understanding reactions and balancing equations</span>
           </div>
         </div>
  
@@ -917,6 +970,7 @@
             <span class="topic-chip">Reflection of Light</span>
             <span class="topic-chip">Refraction</span>
             <span class="topic-chip">Convex/Concave Lens</span>
+            <span class="topic-chip">Numerical Practice</span>
           </div>
         </div>
  
@@ -949,15 +1003,24 @@
             <span class="topic-chip">Active & Passive Voice</span>
             <span class="topic-chip">Direct/Indirect Speech</span>
             <span class="topic-chip">Subject-Verb Agreement</span>
+            <span class="topic-chip">Letter writing</span>
           </div>
         </div>
  
+      </div>
+      <!-- Advanced Combo Discount Banner -->
+      <div class="combo-discount-banner reveal">
+        <div class="cdb-icon">🎉</div>
+        <div class="cdb-text">
+          <strong>Combo Discounts Available!</strong>
+          <span>Enroll in multiple subjects and get special fee benefits.</span>
+        </div>
       </div>
     </div>
  
     <!-- CTA -->
     <div class="summer-cta-wrap reveal">
-      <p>🗓️ Admissions open on <strong>15th April, 2026</strong> — Limited seats per batch!</p>
+      <p>🗓️ Classes starting from <strong>15th April, 2026</strong> — Limited seats per batch!</p>
       <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
         <a href="#contact" class="btn-summer">📝 Pre-Register Interest</a>
         <a href="https://wa.me/917517445450" target="_blank" class="btn-secondary">💬 WhatsApp Us</a>
@@ -1114,7 +1177,7 @@
  
       <div class="faq-item">
         <div class="faq-q">☀️ Tell me about Summer Classes? <span class="faq-chevron">▾</span></div>
-        <div class="faq-a">TTC offers two summer programmes: <strong>Foundation Classes</strong> for Class 1–6 (reading, handwriting, basic maths, grammar) and <strong>Advanced Classes</strong> for Class 7–9 (answer writing, maths fundamentals, science basics, grammar). Admissions open <strong>15th April, 2026</strong>. Fees range from ₹500 to ₹800 per course depending on the subject.</div>
+        <div class="faq-a">TTC offers two summer programmes: <strong>Foundation Classes</strong> for Class 1–6 (reading, handwriting, basic maths, grammar) and <strong>Advanced Classes</strong> for Class 7–9 (answer writing, maths fundamentals, science basics, grammar). Classes starting from <strong>15th April, 2026</strong>. Fees range from ₹500 to ₹800 per course depending on the subject. We also offer Combo Discounts if you enroll in multiple subjects!</div>
       </div>
  
       <div class="faq-item">
@@ -1214,7 +1277,7 @@
         <div class="ci-item"><div class="ci-icon">📍</div><div class="ci-text"><strong>Location</strong><span>Wardha, Maharashtra, India</span></div></div>
         <div class="ci-item"><div class="ci-icon">⏰</div><div class="ci-text"><strong>Class Timings</strong><span>4:00 PM – 8:00 PM, Mon–Sat</span></div></div>
         <div class="ci-item"><div class="ci-icon">🎒</div><div class="ci-text"><strong>Classes Available</strong><span>1st Standard to 9th Standard</span></div></div>
-        <div class="ci-item"><div class="ci-icon">☀️</div><div class="ci-text"><strong>Summer Classes</strong><span>Admissions open 15th April, 2026</span></div></div>
+        <div class="ci-item"><div class="ci-icon">☀️</div><div class="ci-text"><strong>Summer Classes</strong><span>Classes starting from 15th April, 2026</span></div></div>
       </div>
       <div class="contact-form reveal">
         <div id="form-success" style="display:none;text-align:center;padding:40px 20px;">
